@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strrchr.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: achacon- <achacon-@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: szapata- <szapata-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/03/16 19:21:38 by achacon-          #+#    #+#             */
-/*   Updated: 2023/10/24 14:46:23 by achacon-         ###   ########.fr       */
+/*   Created: 2023/12/12 10:03:12 by szapata-          #+#    #+#             */
+/*   Updated: 2023/12/12 11:46:51 by szapata-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,29 +14,13 @@
 
 char	*ft_strrchr(const char *s, int c)
 {
-	int		i;
-	char	*result;
-	char	x;
+	unsigned int	len;
 
-	x = (unsigned char)c;
-	i = ft_strlen(s);
-	if (x == '\0')
-	{
-		result = (char *)&s[i];
-		return (result);
-	}
-	while (s[i] != x && i > 0)
-	{
-		i --;
-	}
-	if (i == 0 && s[i] != x)
-	{
-		result = 0;
-		return (result);
-	}
-	else
-	{
-		result = (char *)&s[i];
-		return (result);
-	}
+	len = ft_strlen(s);
+	if (*(s + len) == (unsigned char) c)
+		return ((char *)s + len);
+	while (len--)
+		if (*(s + len) == (unsigned char) c)
+			return ((char *)s + len);
+	return (0);
 }

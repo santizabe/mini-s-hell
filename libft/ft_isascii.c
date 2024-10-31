@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_isascii.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: achacon- <achacon-@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: szapata- <szapata-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/03/20 16:19:06 by achacon-          #+#    #+#             */
-/*   Updated: 2023/10/15 13:20:25 by achacon-         ###   ########.fr       */
+/*   Created: 2023/11/28 13:43:02 by szapata-          #+#    #+#             */
+/*   Updated: 2023/12/11 23:59:15 by szapata-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,5 @@
 
 int	ft_isascii(int c)
 {
-	if (c >= 0 && c <= 127)
-	{
-		return (1);
-	}
-	else
-	{
-		return (0);
-	}
+	return (c >= 0 && c <= 127);
 }

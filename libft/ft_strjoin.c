@@ -3,40 +3,26 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strjoin.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: achacon- <achacon-@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: szapata- <szapata-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/03/20 16:19:06 by achacon-          #+#    #+#             */
-/*   Updated: 2023/10/16 13:18:37 by achacon-         ###   ########.fr       */
+/*   Created: 2023/12/14 22:38:11 by santizabe         #+#    #+#             */
+/*   Updated: 2023/12/19 21:18:50 by szapata-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
+#include <stdlib.h>
 
 char	*ft_strjoin(char const *s1, char const *s2)
 {
-	char	*dest;
-	size_t	size1;
-	size_t	size_total;
-	size_t	i;
-	size_t	j;
+	char	*s;
+	char	*tmp;
 
-	size1 = ft_strlen(s1) - 1;
-	size_total = size1 + ft_strlen(s2);
-	dest = malloc((size_total + 2) * sizeof(char));
-	if (!dest)
-		return (0);
-	i = 0;
-	j = 0;
-	while (i <= size1 && s1[i] != '\0')
-	{
-		dest[i] = s1[i];
-		i++;
-	}
-	while (i + j <= size_total && s2[j] != '\0')
-	{
-		dest[i + j] = s2[j];
-		j++;
-	}
-	dest[i + j] = '\0';
-	return (dest);
+	s = (char *)malloc(ft_strlen(s1) + ft_strlen(s2) + 1);
+	if (!s)
+		return (s);
+	tmp = s;
+	s = (char *)ft_memmove(s, s1, ft_strlen(s1));
+	s = (char *)ft_memmove(s + ft_strlen(s1), s2, ft_strlen(s2) + 1);
+	return (tmp);
 }

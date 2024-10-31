@@ -3,60 +3,36 @@
 /*                                                        :::      ::::::::   */
 /*   ft_putnbr_fd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: achacon- <achacon-@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: szapata- <szapata-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/03/15 10:21:08 by achacon-          #+#    #+#             */
-/*   Updated: 2023/10/25 15:38:25 by achacon-         ###   ########.fr       */
+/*   Created: 2023/12/20 12:52:16 by szapata-          #+#    #+#             */
+/*   Updated: 2023/12/20 13:35:19 by szapata-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
+#include <unistd.h>
 
-static char	intochar(int x)
+static void	ft_putnbr_helper(int n, int fd)
 {
-	char	c;
+	int	minus;
+	int	res;
 
-	c = x + 48;
-	return (c);
+	if (!n)
+		return ;
+	minus = 1;
+	if (n < 0)
+		minus = -1;
+	res = ((n % 10) * minus);
+	ft_putnbr_helper(n / 10, fd);
+	ft_putchar_fd(res + 48, fd);
 }
 
-static int	digits(int n)
+void	ft_putnbr_fd(int n, int fd)
 {
-	int	result;
-
-	result = 0;
-	while (n > 0)
-	{
-		result++;
-		n = n / 10;
-	}
-	return (result);
-}
-
-void	ft_putnbr_fd(int nb, int fd)
-{
-	char			char_print;
-	int				num_print;
-	unsigned int	factor;
-	unsigned int	nb_1;
-
-	factor = 10;
-	if (nb == -2147483648)
-		ft_putstr_fd("-2147483648", fd);
-	else
-	{
-		if (nb < 0)
-		{
-			write(fd, "-", 1);
-			nb = nb * (-1);
-		}
-		nb_1 = nb;
-		if (digits(nb_1) > 1)
-		{
-			ft_putnbr_fd(nb_1 / factor, fd);
-		}
-		num_print = nb_1 % factor;
-		char_print = intochar(num_print);
-		ft_putchar_fd(char_print, fd);
-	}
+	if (!n)
+		ft_putchar_fd('0', fd);
+	if (n < 0)
+		ft_putchar_fd('-', fd);
+	ft_putnbr_helper(n, fd);
 }

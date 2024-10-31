@@ -20,9 +20,26 @@
 typedef struct s_data
 {
     char    **env;
-	char	*input;
+	char	*prompt;
     char    **array_input;
+	char	exit_status;
 }			t_data;
+
+typedef struct s_redir
+{
+	char			*file;
+	int				mode;
+}			t_redir;
+
+typedef struct s_cmd
+{
+	t_list			*w_lst;
+	t_list			*in_redir;
+	t_list			*out_redir;
+	char			*limiter;
+	struct	s_cmd	*next;
+}			t_cmd;
+
 
 // SIGNALS
 void		signals(void);

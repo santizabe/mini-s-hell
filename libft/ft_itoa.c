@@ -3,81 +3,54 @@
 /*                                                        :::      ::::::::   */
 /*   ft_itoa.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: achacon- <achacon-@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: szapata- <szapata-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/10/12 13:11:05 by achacon-          #+#    #+#             */
-/*   Updated: 2023/10/25 15:33:04 by achacon-         ###   ########.fr       */
+/*   Created: 2023/12/19 21:15:39 by santizabe         #+#    #+#             */
+/*   Updated: 2023/12/21 13:45:43 by szapata-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
+#include <stdlib.h>
+#include <stdio.h>
 
-static int	digits(int n)
+static int	digit_count(int n)
 {
-	int	result;
+	int	count;
 
-	if (n < 0)
-		n = -n;
-	result = 0;
-	if (n == 0)
+	if (!n)
 		return (1);
-	while (n > 0)
-	{
-		result++;
-		n = n / 10;
-	}
-	return (result);
-}
-
-static char	*positive(int n)
-{
-	int		digs;
-	char	*s;
-
-	digs = digits(n);
-	s = malloc((digs + 1) * sizeof(char));
-	if (s == NULL)
-		return (NULL);
-	s[digs] = '\0';
-	digs = digs - 1;
-	while (digs >= 0)
-	{
-		s[digs] = n % 10 + 48;
-		digs--;
-		n = n / 10;
-	}
-	return (s);
-}
-
-static char	*negative(int n)
-{
-	int		digs;
-	char	*s;
-
-	digs = digits(n) + 1;
-	if (n == -2147483648)
-		return (ft_strdup("-2147483648"));
-	s = malloc((digs + 1) * sizeof(char));
-	if (s == NULL)
-		return (NULL);
-	s[0] = '-';
-	n = -n;
-	s[digs] = '\0';
-	digs = digs - 1;
-	while (n >= 0 && digs >= 0)
-	{
-		s[digs] = n % 10 + 48;
-		digs--;
-		n = n / 10;
-	}
-	s[0] = '-';
-	return (s);
+	count = 0;
+	while (n && ++count)
+		n /= 10;
+	return (count);
 }
 
 char	*ft_itoa(int n)
 {
-	if (n >= 0)
-		return (positive(n));
-	else
-		return (negative(n));
+	int		count;
+	int		minus;
+	char	*str;
+	char	*tmp;
+
+	count = digit_count(n);
+	minus = 1;
+	if (n < 0)
+		count++;
+	str = (char *)malloc(count + 1);
+	if (!str)
+		return (str);
+	tmp = str;
+	str[count] = 0;
+	if (n < 0 && count--)
+	{
+		minus = -1;
+		*str++ = '-';
+	}
+	while (count)
+	{
+		str[--count] = ((n % 10) * minus) + 48;
+		n /= 10;
+	}
+	return (tmp);
 }

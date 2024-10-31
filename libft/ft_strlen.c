@@ -3,23 +3,24 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strlen.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: achacon- <achacon-@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: szapata- <szapata-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/03/16 19:21:38 by achacon-          #+#    #+#             */
-/*   Updated: 2023/10/25 14:18:00 by achacon-         ###   ########.fr       */
+/*   Created: 2023/10/31 01:54:27 by szapata-          #+#    #+#             */
+/*   Updated: 2023/12/19 21:18:58 by szapata-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-size_t	ft_strlen(const char *s)
+size_t	ft_strlen(const char *str)
 {
-	unsigned int	count;
+	int		i;
 
-	count = 0;
-	while (s[count] != '\0')
+	i = 0;
+	while (*str)
 	{
-		count++;
+		i++;
+		str++;
 	}
-	return (count);
+	return (i);
 }

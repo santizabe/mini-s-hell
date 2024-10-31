@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_toupper.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: achacon- <achacon-@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: szapata- <szapata-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/03/20 16:19:06 by achacon-          #+#    #+#             */
-/*   Updated: 2023/10/15 13:56:54 by achacon-         ###   ########.fr       */
+/*   Created: 2023/12/12 09:50:30 by szapata-          #+#    #+#             */
+/*   Updated: 2023/12/21 14:20:20 by szapata-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,7 @@
 
 int	ft_toupper(int c)
 {
-	if (c >= 97 && c <= 122)
-	{
+	if (c >= 'a' && c <= 'z')
 		return (c - 32);
-	}
-	else
-	{
-		return (c);
-	}
+	return (c);
 }

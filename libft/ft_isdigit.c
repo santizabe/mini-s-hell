@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_isdigit.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: achacon- <achacon-@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: szapata- <szapata-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/03/20 16:19:06 by achacon-          #+#    #+#             */
-/*   Updated: 2024/02/05 11:47:39 by achacon-         ###   ########.fr       */
+/*   Created: 2023/11/06 11:51:39 by szapata-          #+#    #+#             */
+/*   Updated: 2023/12/11 23:56:09 by szapata-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,5 @@
 
 int	ft_isdigit(int c)
 {
-	if (c >= 48 && c <= 57)
-	{
-		return (1);
-	}
-	else
-	{
-		return (0);
-	}
+	return (c >= 48 && c <= 57);
 }

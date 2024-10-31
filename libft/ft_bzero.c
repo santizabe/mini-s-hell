@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_bzero.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: achacon- <achacon-@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: szapata- <szapata-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/03/20 16:19:06 by achacon-          #+#    #+#             */
-/*   Updated: 2023/10/15 17:44:57 by achacon-         ###   ########.fr       */
+/*   Created: 2023/11/28 14:37:53 by szapata-          #+#    #+#             */
+/*   Updated: 2023/12/12 00:02:29 by szapata-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,15 @@
 
 void	ft_bzero(void *s, size_t n)
 {
-	size_t	i;
+	unsigned int	i;
+	unsigned char	*tmp;
 
 	i = 0;
+	tmp = (unsigned char *) s;
 	while (i < n)
 	{
-		((unsigned char *)s)[i] = 0;
+		*tmp = 0;
 		i++;
+		tmp++;
 	}
 }

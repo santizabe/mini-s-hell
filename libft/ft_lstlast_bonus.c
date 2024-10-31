@@ -3,25 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   ft_lstlast_bonus.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: achacon- <achacon-@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: szapata- <szapata-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/03/20 16:19:06 by achacon-          #+#    #+#             */
-/*   Updated: 2024/02/08 12:50:49 by achacon-         ###   ########.fr       */
+/*   Created: 2023/12/20 19:07:28 by szapata-          #+#    #+#             */
+/*   Updated: 2023/12/20 19:43:12 by szapata-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-stack	*ft_lstlast(stack *lst)
+t_list	*ft_lstlast(t_list *lst)
 {
-	stack	*ptr;
-
-	ptr = lst;
-	if (lst == NULL)
+	if (!lst)
 		return (NULL);
-	while (ptr -> next)
-	{
-		ptr = ptr -> next;
-	}
-	return (ptr);
+	while (lst->next)
+		lst = lst->next;
+	return (lst);
 }
