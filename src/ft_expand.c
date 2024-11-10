@@ -6,7 +6,7 @@
 /*   By: szapata- <szapata-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 22:03:04 by szapata-          #+#    #+#             */
-/*   Updated: 2024/10/31 22:44:53 by szapata-         ###   ########.fr       */
+/*   Updated: 2024/11/02 19:46:29 by szapata-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,17 +19,22 @@
 int	ft_expand(char *prompt, char flags)
 {
 	int	count;
+	char	*res;
+	char	*res2;
 
 	count = 0;
 	if (flags & 2 || flags & 16)
 		return (0);
 	prompt++;
-	while (ft_isalpha(*prompt) && ++count)
-		prompt++;
-	while (ft_isalnum(*prompt) && ++count)
-		prompt++;
-	if (!count && !(flags & 2))	// if not between quotes
+	while (ft_isalpha(prompt[count]))
+		count++;
+	while (ft_isalnum(prompt[count]))
+		count++;
+	if (!count && !(flags & 1))	// if not between quotes
 		return (-1);
-	//strjoin prompt - count, substr(prompt - count, 0, count)
-	//get env. Handle malloc errors.
+	res = ft_substr(prompt, 0, count);
+	if (!res)
+		return (-1);
+	res2 = getenv(res);
+	return (count);
 }

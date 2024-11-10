@@ -1,19 +1,5 @@
 #include "../include/minishell.h"
 
-int	only_spaces(char *input)
-{
-	int	i;
-
-	i = 0;
-	while (input[i] != '\0')
-	{
-		if (input[i] != ' ')
-			return (0);
-		i++;
-	}
-	return (1);
-}
-
 void	history(char *input)
 {
 	if (input != NULL && ft_strlen(input) != 0 && only_spaces(input) == 0)
@@ -22,13 +8,53 @@ void	history(char *input)
 	}
 }
 
-void	init_data(t_data *data, char **env, t_cmd **cmd_lst)
+int	d_ptrlen(char **ptr)
 {
-	data->env = env;
-	//print_array(data->env);
+	int	count;
+
+	count = 0;
+	while (ptr && *ptr && ++count)
+		ptr++;
+	return (count);
+}
+
+int	double_free(char **ptr)
+{
+	char	**tmp;
+
+	tmp = ptr;
+	while (ptr && *ptr)
+		free(*ptr++);
+	free(tmp);
+	return (1);
+}
+
+int	copy_env(char **dst, char **src)
+{
+	int	env_len;
+	int	i;
+
+	env_len = d_ptrlen(src);
+	dst = (char **)malloc((env_len + 1) * sizeof(char *));
+	if (!dst)
+		return (-1);
+	dst[env_len] = NULL;
+	i = 0;
+	while (i < env_len)
+	{
+		dst[i] = ft_strdup(src[i]);
+		if (!dst[i] && double_free(dst))
+			return (NULL);
+	}
+	return (0);
+}
+
+int	init_data(t_data *data, char **env, t_cmd **cmd_lst)
+{
+	if (copy_env(&(data->env), env) == -1)
+		return (-1);
 	data->prompt = NULL;
-	data->array_input = NULL;
-	*cmd_lst = ft_lstnew(0);
+	(*cmd_lst) = ft_lstnew(0);
 	ft_memset(*cmd_lst, 0, sizeof(t_cmd));
 }
 
@@ -39,6 +65,7 @@ void    free_data(t_data *data, t_cmd *cmd_lst)
 	ft_lstclear(&(cmd_lst->out_redir), free);
 	rl_clear_history();
     free(data->prompt);
+	double_free(data->env);
 }
 
 int	main(int argc, char** argv, char **env)
@@ -49,13 +76,16 @@ int	main(int argc, char** argv, char **env)
 	signals();
 	while (1)
 	{
-		init_data(&data, env, &cmd_lst);
+		if (init_data(&data, env, &cmd_lst) == -1)
+			break ;
 		data.prompt = readline("MiniShell> ");
 		if (data.prompt)
 		{
 			history(data.prompt);
-			ft_parse(data, cmd_lst);
-			//ft_execute(data, cmd_lst);
+			if (ft_parse(data, cmd_lst) == -1)
+				print_error();
+			else
+				ft_execute(data, cmd_lst);
 		}
     	free_data(&data, cmd_lst);
 	}

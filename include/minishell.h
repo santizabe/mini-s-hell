@@ -36,7 +36,7 @@ typedef struct s_cmd
 	t_list			*w_lst;
 	t_list			*in_redir;
 	t_list			*out_redir;
-	char			*limiter;
+	t_list			*limiter;
 	struct	s_cmd	*next;
 }			t_cmd;
 
