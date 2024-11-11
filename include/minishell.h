@@ -46,7 +46,7 @@ void		signals(void);
 void		handle_ctrl_c(int signal);
 
 // PARSING
-void parsing(t_data *data);
+int	ft_parse(t_data data, t_cmd *cmd_lst);
 
 // UTILS
 void		print_array(char **array);

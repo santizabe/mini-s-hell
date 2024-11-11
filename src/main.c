@@ -2,10 +2,15 @@
 
 void	history(char *input)
 {
-	if (input != NULL && ft_strlen(input) != 0 && only_spaces(input) == 0)
-	{
+	// int	i;
+	// int	strlen;
+
+	// i = 0;
+	// strlen = ft_strlen(input);
+	// while (i < strlen)
+	// 	if (input[i] != ' ')
+	if (input != NULL && ft_strlen(input) != 0)
 		add_history(input);
-	}
 }
 
 int	d_ptrlen(char **ptr)
@@ -44,18 +49,18 @@ int	copy_env(char **dst, char **src)
 	{
 		dst[i] = ft_strdup(src[i]);
 		if (!dst[i] && double_free(dst))
-			return (NULL);
+			return (-1);
+		i++;
 	}
 	return (0);
 }
 
-int	init_data(t_data *data, char **env, t_cmd **cmd_lst)
+int	init_data(t_data *data, t_cmd **cmd_lst)
 {
-	if (copy_env(&(data->env), env) == -1)
-		return (-1);
 	data->prompt = NULL;
-	(*cmd_lst) = ft_lstnew(0);
+	(*cmd_lst) = (t_cmd *)malloc(sizeof(t_cmd));
 	ft_memset(*cmd_lst, 0, sizeof(t_cmd));
+	return (0);
 }
 
 void    free_data(t_data *data, t_cmd *cmd_lst)
@@ -65,7 +70,38 @@ void    free_data(t_data *data, t_cmd *cmd_lst)
 	ft_lstclear(&(cmd_lst->out_redir), free);
 	rl_clear_history();
     free(data->prompt);
-	double_free(data->env);
+}
+
+void	print_data(t_cmd *cmd_lst)
+{
+	t_redir *redir;
+
+	while (cmd_lst->w_lst)
+	{
+		printf("%s, ", (char *)cmd_lst->w_lst->content);
+		cmd_lst->w_lst = cmd_lst->w_lst->next;
+	}
+	printf("\n");
+	while (cmd_lst->in_redir)
+	{
+		redir = (t_redir *)cmd_lst->in_redir->content;
+		printf("%s, ", redir->file);
+		cmd_lst->in_redir = cmd_lst->in_redir->next;
+	}
+	printf("\n");
+	while (cmd_lst->out_redir)
+	{
+		redir = (t_redir *)cmd_lst->out_redir->content;
+		printf("%s, ", redir->file);
+		cmd_lst->out_redir = cmd_lst->out_redir->next;
+	}
+	printf("\n");
+	while (cmd_lst->limiter)
+	{		
+		printf("%s, ", (char *)cmd_lst->limiter->content);
+		cmd_lst->limiter = cmd_lst->limiter->next;
+	}
+	printf("\n");
 }
 
 int	main(int argc, char** argv, char **env)
@@ -74,20 +110,25 @@ int	main(int argc, char** argv, char **env)
 	t_cmd	*cmd_lst;
 
 	signals();
+	argc++;
+	argv++;
+	if (copy_env(data.env, env) == -1)
+		return (-1);
 	while (1)
 	{
-		if (init_data(&data, env, &cmd_lst) == -1)
+		if (init_data(&data, &cmd_lst) == -1)
 			break ;
 		data.prompt = readline("MiniShell> ");
-		if (data.prompt)
+		if (!ft_strncmp(data.prompt, "exit", 4))
+			break ;
+		if (data.prompt && *(data.prompt))
 		{
 			history(data.prompt);
-			if (ft_parse(data, cmd_lst) == -1)
-				print_error();
-			else
-				ft_execute(data, cmd_lst);
+			if (!ft_parse(data, cmd_lst))
+				print_data(cmd_lst);
 		}
     	free_data(&data, cmd_lst);
 	}
+	free_data(&data, cmd_lst);
 	return (0);
 }

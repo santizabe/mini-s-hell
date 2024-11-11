@@ -6,14 +6,15 @@
 /*   By: szapata- <szapata-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 22:03:04 by szapata-          #+#    #+#             */
-/*   Updated: 2024/11/02 19:46:29 by szapata-         ###   ########.fr       */
+/*   Updated: 2024/11/11 14:52:54 by szapata-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
 /*
-	If a $ is found, it should expand the variable if 
+	If a $ is found, it should expand the variable if
+	not inside simple quotes
  */
 
 int	ft_expand(char *prompt, char flags)
@@ -23,6 +24,8 @@ int	ft_expand(char *prompt, char flags)
 	char	*res2;
 
 	count = 0;
+	res2 = NULL;
+	res = NULL;
 	if (flags & 2 || flags & 16)
 		return (0);
 	prompt++;
@@ -36,5 +39,5 @@ int	ft_expand(char *prompt, char flags)
 	if (!res)
 		return (-1);
 	res2 = getenv(res);
-	return (count);
+	return (ft_strlen(res2));
 }

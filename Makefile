@@ -19,7 +19,7 @@ END = \033[0m
 
 # Minishell
 NAME = minishell
-SRC = src/sketch.c src/signals.c src/parsing.c src/utils.c src/execution.c src/path.c
+SRC = $(wildcard src/*.c)
 OBJ_DIR = obj
 OBJT = $(SRC:src/%.c=$(OBJ_DIR)/%.o)
 
@@ -32,11 +32,17 @@ all: $(NAME)
 
 $(NAME): ${OBJT}
 	@echo "$(YELLOW)Compiling Libft.$(END)"
-	@make -s -C libft
+	@make bonus -C libft
 	@echo "$(GREEN)Libft Compiled.$(END)"
 	@echo "$(YELLOW)Compiling Minishell.$(END)"
-	@gcc ${CFLAGS} ${OBJT} ${INC} ${LFLAGS} -o ${NAME} ${LIBFT}
+	@gcc ${CFLAGS} ${OBJT} ${INC} ${LFLAGS} ${LIBFT} -o ${NAME}
 	@echo "$(GREEN)Minishell Compiled.$(END)"
+
+debug: $(LIBFT)
+	@gcc src/*.c $(LIBFT) $(LFLAGS) $(INC) -o paco -g
+
+$(LIBFT):
+	@make bonus -c libft
 
 clean:
 	@rm -rf ${OBJ_DIR}
@@ -55,3 +61,5 @@ norminette:
 	@norminette ./libft
 	@echo "$(YELLOW)Norminette minishell.$(END)"
 	@norminette ./src
+
+.PHONY: norminette clean fclean debug re all

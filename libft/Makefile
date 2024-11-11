@@ -26,8 +26,8 @@ all: $(NAME)
 $(NAME): $(OBJS)
 	ar rcs $(NAME) $(OBJS)
 
-bonus: $(B_OBJS)
-	ar rcs $(NAME) $(B_OBJS)
+bonus: $(B_OBJS) $(OBJS)
+	ar rcs $(NAME) $(OBJS) $(B_OBJS)
 
 %.o: %.c
 	$(CC) $(FLAGS) -c $< -o $@
