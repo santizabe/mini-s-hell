@@ -77,17 +77,19 @@ int	redir_handler(char *str, int flags, t_cmd *cmd_lst)
 	node = ft_lstnew(redir);
 	if (!node && ft_free(redir))
 		return (-1);
-	if (flags & 4)
+	if (flags & 4 || flags & 1)
 	{
 		redir->mode = O_RDONLY | O_CREAT;
-		ft_lstadd_front(&(cmd_lst->in_redir), node);
+		if (flags & 1)
+			redir->mode = -1;
+		ft_lstadd_back(&(cmd_lst->in_redir), node);
 	}
 	else
 	{
 		redir->mode = O_RDWR | O_CREAT | O_TRUNC;
 		if (flags & 2)
 			redir->mode = O_WRONLY | O_CREAT | O_APPEND;
-		ft_lstadd_front(&(cmd_lst->out_redir), node);
+		ft_lstadd_back(&(cmd_lst->out_redir), node);
 	}
 	return (0);
 }
@@ -100,13 +102,11 @@ int	add_word_to_list(char *start, char *end, int flags, t_cmd *cmd_lst)
 	str = ft_substr(start, 0, end - start);
 	if (!str)
 		return (-1);
-	if (flags & 2 || flags & 4 || flags & 8)
+	if (flags)
 		return (redir_handler(str, flags, cmd_lst));
 	node = ft_lstnew(str);
 	if (!node && ft_free(str))
 		return (-1);
-	if (flags & 1)
-		ft_lstadd_back(&(cmd_lst->limiter), node);
 	else
 		ft_lstadd_back(&(cmd_lst->w_lst), node);
 	return (0);
@@ -137,10 +137,12 @@ int	add_word(char **prompt, int flags, t_cmd *cmd_lst)
 		return (-1);
 	if (add_word_to_list(start, *prompt, flags, cmd_lst) == -1)
 		return (-1);
+	while (*prompt && **prompt == ' ')
+		(*prompt)++;
 	return (0);
 }
 
-void	ft_print_err(char *prompt)
+int	ft_print_err(char *prompt)
 {
 	char	*err_msg;
 
@@ -154,6 +156,7 @@ void	ft_print_err(char *prompt)
 		write(2, "'", 1);
 	}
 	ft_putstr_fd("\n", 2);
+	return (1);
 }
 
 int	ft_parse(t_data data, t_cmd *cmd_lst)
@@ -169,10 +172,16 @@ int	ft_parse(t_data data, t_cmd *cmd_lst)
 			prompt++;
 		if (ft_ismeta(*prompt))
 			flags = set_flags(&prompt);
-		if (add_word(&prompt, flags, cmd_lst) == -1)
-		{
-			ft_print_err(prompt);
+		if (add_word(&prompt, flags, cmd_lst) == -1
+			&& ft_print_err(prompt))
 			return (-1);
+		if (*prompt == '|' && prompt++)
+		{
+			cmd_lst->next = (t_cmd *)malloc(sizeof(t_cmd));
+			if (!cmd_lst->next)
+				return (-1);
+			cmd_lst = cmd_lst->next;
+			ft_memset(cmd_lst, 0, sizeof(t_cmd));
 		}
 	}
 	return (0);

@@ -63,46 +63,45 @@ int	init_data(t_data *data, t_cmd **cmd_lst)
 	return (0);
 }
 
-void    free_data(t_data *data, t_cmd *cmd_lst)
+int	free_data(t_data *data, t_cmd *cmd_lst)
 {
 	ft_lstclear(&(cmd_lst->w_lst), free);
 	ft_lstclear(&(cmd_lst->in_redir), free);
 	ft_lstclear(&(cmd_lst->out_redir), free);
 	rl_clear_history();
-    free(data->prompt);
+	free(data->prompt);
+	return (1);
 }
 
-void	print_data(t_cmd *cmd_lst)
-{
-	t_redir *redir;
+// void	print_data(t_cmd *cmd_lst)
+// {
+// 	t_redir *redir;
 
-	while (cmd_lst->w_lst)
-	{
-		printf("%s, ", (char *)cmd_lst->w_lst->content);
-		cmd_lst->w_lst = cmd_lst->w_lst->next;
-	}
-	printf("\n");
-	while (cmd_lst->in_redir)
-	{
-		redir = (t_redir *)cmd_lst->in_redir->content;
-		printf("%s, ", redir->file);
-		cmd_lst->in_redir = cmd_lst->in_redir->next;
-	}
-	printf("\n");
-	while (cmd_lst->out_redir)
-	{
-		redir = (t_redir *)cmd_lst->out_redir->content;
-		printf("%s, ", redir->file);
-		cmd_lst->out_redir = cmd_lst->out_redir->next;
-	}
-	printf("\n");
-	while (cmd_lst->limiter)
-	{		
-		printf("%s, ", (char *)cmd_lst->limiter->content);
-		cmd_lst->limiter = cmd_lst->limiter->next;
-	}
-	printf("\n");
-}
+// 	while (cmd_lst)
+// 	{
+// 	while (cmd_lst->w_lst)
+// 	{
+// 		printf("%s, ", (char *)cmd_lst->w_lst->content);
+// 		cmd_lst->w_lst = cmd_lst->w_lst->next;
+// 	}
+// 	printf("\n");
+// 	while (cmd_lst->in_redir)
+// 	{
+// 		redir = (t_redir *)cmd_lst->in_redir->content;
+// 		printf("%s, ", redir->file);
+// 		cmd_lst->in_redir = cmd_lst->in_redir->next;
+// 	}
+// 	printf("\n");
+// 	while (cmd_lst->out_redir)
+// 	{
+// 		redir = (t_redir *)cmd_lst->out_redir->content;
+// 		printf("%s, ", redir->file);
+// 		cmd_lst->out_redir = cmd_lst->out_redir->next;
+// 	}
+// 	printf("\n ----------------------\n");
+// 	cmd_lst = cmd_lst->next;
+// 	}
+// }
 
 int	main(int argc, char** argv, char **env)
 {
@@ -110,9 +109,7 @@ int	main(int argc, char** argv, char **env)
 	t_cmd	*cmd_lst;
 
 	signals();
-	argc++;
-	argv++;
-	if (copy_env(data.env, env) == -1)
+	if (argc++ && argv++ && copy_env(data.env, env) == -1)
 		return (-1);
 	while (1)
 	{
@@ -125,9 +122,10 @@ int	main(int argc, char** argv, char **env)
 		{
 			history(data.prompt);
 			if (!ft_parse(data, cmd_lst))
-				print_data(cmd_lst);
+				if (!ft_expand(cmd_lst) && !remove_quotes(cmd_lst))
+					print_data(cmd_lst);
 		}
-    	free_data(&data, cmd_lst);
+		free_data(&data, cmd_lst);
 	}
 	free_data(&data, cmd_lst);
 	return (0);
