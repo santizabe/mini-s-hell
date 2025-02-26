@@ -6,58 +6,78 @@
 /*   By: szapata- <szapata-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 22:03:04 by szapata-          #+#    #+#             */
-/*   Updated: 2024/11/15 22:37:38 by szapata-         ###   ########.fr       */
+/*   Updated: 2025/02/26 12:53:27 by szapata-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-/*
-	If a $ is found, it should expand the variable if
-	not inside simple quotes
- */
-
-// char	*ft_expand_word(char *str)
-// {
-// 	char	*exp;
-// 	char	*s_q;
-// 	char	*d_q;
-
-// 	exp = ft_strchr(str, '$');
-// 	if (!exp)
-// 		return (str);
-// 	s_q = ft_strchr(str, '\'');
-// 	d_q = ft_strchr(str, '\"');
-// 	if (s_q)
-// }
-
-char	*ft_join(char *s1, char *s2, char *s3)
+char	*my_getenv(char *str, char **env)
 {
-	char	*tmp;
-	char	*var;
+	int		strlen;
 
-	s3++;
-	tmp = s3;
-	var = NULL;
-	while (s3 && *s3 && ft_isalpha(*s3))
-		s3++;
-	while (s3 != tmp && ft_isalnum(*s3))
-		s3++;
-	tmp = ft_substr(tmp, 0, s3 - tmp);
-	if (!tmp)
-		return (NULL);
-	var = getenv(tmp);
+	strlen = ft_strlen(str);
+	while (*env)
+	{
+		if (!ft_strncmp(str, *env, strlen) && (*env)[strlen] == '=')
+			return (&((*env)[strlen + 1]));
+		env++;
+	}
+	return (NULL);
 }
 
-char	*ft_expand_word(char *str)
+char	*set_new_word(char *s1, char *tmp, char *s2, char *exp)
+{
+	char	*var;
+	char	*s1_tmp;
+
+	var = tmp;
+	s1_tmp = s1;
+	while (*s1 != '$')
+		*tmp++ = *s1++;
+	while (exp && *exp)
+		*tmp++ = *exp++;
+	while (*s2)
+		*tmp++ = *s2++;
+	*tmp = '\0';
+	free (s1_tmp);
+	return (var);
+}
+
+char	*ft_expand_var(char *s1, char *s2, char **env)
+{
+	char	*var;
+	char	*exp;
+	char	*tmp;
+	int		var_len;
+	int		sum;
+
+	var = ++s2;
+	var_len = 0;
+	while (s2 && ft_isalpha(*s2))
+		s2++;
+	tmp = ft_substr(var, 0, s2 - var);
+	if (!tmp)
+		return (NULL);
+	exp = my_getenv(tmp, env);
+	free(tmp);
+	if (exp)
+		var_len = ft_strlen(exp);
+	tmp = ft_strchr(s1, '$');
+	sum = tmp - s1 + var_len + ft_strlen(s2) + 1;
+	tmp = (char *)malloc(sizeof(char) + sum);
+	if (!tmp)
+		return (NULL);
+	return (set_new_word(s1, tmp, s2, exp));
+}
+
+char	*ft_expand_word(char *str, char **env)
 {
 	char	*tmp;
-	char	*res;
 	char	q;
 
 	tmp = str;
 	q = 0;
-	res = NULL;
 	while (str && *str)
 	{
 		if (*str == '\"')
@@ -67,64 +87,11 @@ char	*ft_expand_word(char *str)
 				str++;
 		if (*str == '$')
 		{
-			res = ft_join(res, tmp, str);
-			if (!res)
+			tmp = ft_expand_var(tmp, str, env);
+			if (!tmp)
 				return (NULL);
 		}
 		str++;
 	}
-	res = str + 1;
-
-	return (res);
-}
-
-int	ft_args_expand(t_list *lst)
-{
-	char	*str;
-
-	str = NULL;
-	while (lst)
-	{
-		str = (char *)lst->content;
-		str = ft_expand_word(str);
-		if (!str)
-			return (-1);
-		lst->content = str;
-		lst = lst->next;
-	}
-	return (0);
-}
-
-int	ft_files_expand(t_list *lst)
-{
-	t_redir	*redir;
-
-	redir = NULL;
-	while (lst)
-	{
-		redir = (t_redir *)lst->content;
-		if (redir->mode != -1)
-		{
-			redir->file = ft_expand_word(redir->file);
-			if (!redir->file)
-				return (-1);
-		}
-		lst = lst->next;
-	}
-	return (0);
-}
-
-int	ft_expand(t_cmd *cmd_lst)
-{
-	while (cmd_lst)
-	{
-		if (ft_args_expand(cmd_lst->w_lst) == -1)
-			return (-1);
-		if (ft_files_expand(cmd_lst->in_redir) == -1)
-			return (-1);
-		if (ft_files_expand(cmd_lst->out_redir) == -1)
-			return (-1);
-		cmd_lst = cmd_lst->next;
-	}
-	return (0);
+	return (tmp);
 }

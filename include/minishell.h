@@ -45,7 +45,12 @@ void		signals(void);
 void		handle_ctrl_c(int signal);
 
 // PARSING
-int	ft_parse(t_data data, t_cmd *cmd_lst);
+int		ft_parse(t_data data, t_cmd *cmd_lst);
+
+// EXPANSION
+int		ft_expand(t_cmd *cmd_lst, char **env);
+char	*ft_expand_word(char *str, char **env);
+
 
 // UTILS
 void		print_array(char **array);
