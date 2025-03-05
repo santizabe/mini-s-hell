@@ -6,7 +6,7 @@
 /*   By: szapata- <szapata-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/02 16:58:46 by szapata-          #+#    #+#             */
-/*   Updated: 2025/03/05 11:15:09 by szapata-         ###   ########.fr       */
+/*   Updated: 2025/03/05 15:05:56 by szapata-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,11 +35,48 @@ int		check_files(t_list *redir_lst)
 	return (0);
 }
 
+int		open_files(t_list *f_lst)
+{
+	int		fd;
+	t_redir	*redir;
+
+	fd = 0;
+	while (f_lst)
+	{
+		redir = (t_redir *)f_lst->content;
+		if (redir->mode == (O_RDWR | O_CREAT | O_TRUNC)
+			|| redir->mode == (O_RDWR | O_CREAT | O_APPEND))
+		{
+			fd = open(redir->file, redir->mode, 0777);
+			if (fd == -1 && print_err("open"))
+				return (-1);
+		}
+		else if (redir->mode == O_RDONLY)
+		{
+			fd = open(redir->file, redir->mode);
+			if (fd == -1 && print_err("open"))
+				return (-1);
+		}
+		if (!(f_lst->next))
+			break ;
+		close(fd);
+	}
+	return (fd);
+}
+
 int		exec_simple(t_cmd *cmd_lst)
 {
+	int	in_fd;
+	int	out_fd;
+
 	if (check_files(cmd_lst->in_redir))
 		return (-1);
-	ft_putstr_fd("All good\n", STDOUT_FILENO);
+	in_fd = open_files(cmd_lst->in_redir);
+	if (in_fd == -1)
+		return (-1);
+	out_fd = open_files(cmd_lst->out_redir);
+	if (out_fd == -1)
+		return (-1);
 	return (0);
 }
 
