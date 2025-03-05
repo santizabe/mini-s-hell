@@ -17,24 +17,6 @@ char	*ft_strjoin2(char *s1, char *s2)
 	return (ft_strjoin(s1, s2));
 }
 
-// int	ft_expand(char **res, char *prompt)
-// {
-// 	char	*tmp;
-// 	int		count;
-// 	char	*var;
-// 	char	*var2;
-
-// 	tmp = *res;
-// 	prompt++;
-// 	count = 0;
-// 	while (ft_isalnum(*prompt++))
-// 		count++;
-// 	if (!count)
-// 		return (1);
-// 	var = ft_substr(prompt - count, 0, count);
-// 	var2 = getenv(var);
-// }
-
 char	set_flags(char **c)
 {
 	char	s;
@@ -79,9 +61,9 @@ int	redir_handler(char *str, int flags, t_cmd *cmd_lst)
 		return (-1);
 	if (flags & 4 || flags & 1)
 	{
-		redir->mode = O_RDONLY | O_CREAT;
+		redir->mode = O_RDONLY;
 		if (flags & 1)
-			redir->mode = -1;
+			redir->mode = -1;	// -1 for here_doc
 		ft_lstadd_back(&(cmd_lst->in_redir), node);
 	}
 	else
@@ -142,7 +124,7 @@ int	add_word(char **prompt, int flags, t_cmd *cmd_lst)
 	return (0);
 }
 
-int	ft_print_err(char *prompt)
+static int	ft_print_err(char *prompt)
 {
 	char	*err_msg;
 
@@ -175,7 +157,7 @@ int	ft_parse(t_data data, t_cmd *cmd_lst)
 		if (add_word(&prompt, flags, cmd_lst) == -1
 			&& ft_print_err(prompt))
 			return (-1);
-		if (*prompt == '|' && prompt++)
+		if (*prompt == '|' && *(prompt + 1) && prompt++)
 		{
 			cmd_lst->next = (t_cmd *)malloc(sizeof(t_cmd));
 			if (!cmd_lst->next)

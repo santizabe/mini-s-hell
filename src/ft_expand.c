@@ -6,25 +6,11 @@
 /*   By: szapata- <szapata-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 22:03:04 by szapata-          #+#    #+#             */
-/*   Updated: 2025/02/26 12:53:27 by szapata-         ###   ########.fr       */
+/*   Updated: 2025/03/02 16:56:38 by szapata-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
-
-char	*my_getenv(char *str, char **env)
-{
-	int		strlen;
-
-	strlen = ft_strlen(str);
-	while (*env)
-	{
-		if (!ft_strncmp(str, *env, strlen) && (*env)[strlen] == '=')
-			return (&((*env)[strlen + 1]));
-		env++;
-	}
-	return (NULL);
-}
 
 char	*set_new_word(char *s1, char *tmp, char *s2, char *exp)
 {

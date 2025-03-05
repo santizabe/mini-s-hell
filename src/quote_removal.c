@@ -6,21 +6,19 @@
 /*   By: szapata- <szapata-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 23:56:06 by szapata-          #+#    #+#             */
-/*   Updated: 2025/02/26 13:04:11 by szapata-         ###   ########.fr       */
+/*   Updated: 2025/02/26 14:39:36 by szapata-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-char    *remove_quotes(char *str)
+void	quote_remove(char *str)
 {
-	char    *tmp;
-	char    q;
-	char    d_q;
+	char	q;
+	char	d_q;
 
 	q = 0;
 	d_q = 0;
-	tmp = str;
 	while (str && *str)
 	{
 		if (*str == '\"' && !(q % 2) && ++d_q)
@@ -37,5 +35,43 @@ char    *remove_quotes(char *str)
 		}
 		str++;
 	}
-	return (tmp);
+}
+
+void	args_quote_remove(t_list *lst)
+{
+	char	*str;
+
+	str = NULL;
+	while (lst)
+	{
+		str = (char *)lst->content;
+		quote_remove(str);
+		lst = lst->next;
+	}
+}
+
+void	file_quote_remove(t_list *lst)
+{
+	t_redir	*redir;
+
+	redir = NULL;
+	while (lst)
+	{
+		redir = (t_redir *)lst->content;
+		if (redir->mode != -1)
+			quote_remove(redir->file);
+		lst = lst->next;
+	}
+}
+
+int	remove_quotes(t_cmd *cmd_lst)
+{
+	while (cmd_lst)
+	{
+		args_quote_remove(cmd_lst->w_lst);
+		file_quote_remove(cmd_lst->in_redir);
+		file_quote_remove(cmd_lst->out_redir);
+		cmd_lst = cmd_lst->next;
+	}
+	return (0);
 }
