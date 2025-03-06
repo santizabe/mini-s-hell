@@ -6,7 +6,7 @@
 /*   By: szapata- <szapata-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 13:04:44 by szapata-          #+#    #+#             */
-/*   Updated: 2025/03/05 11:51:00 by szapata-         ###   ########.fr       */
+/*   Updated: 2025/03/06 13:10:35 by szapata-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,7 @@ int	free_data(t_data *data, t_cmd *cmd_lst, char mode)
 	ft_file_clear(cmd_lst->out_redir);
 	ft_lstclear(&(cmd_lst->in_redir), free);
 	ft_lstclear(&(cmd_lst->out_redir), free);
+	free(cmd_lst->lst_order);
 	free(cmd_lst);
 	free(data->prompt);
 	if (mode == 1)

@@ -73,6 +73,7 @@ int	redir_handler(char *str, int flags, t_cmd *cmd_lst)
 			redir->mode = O_WRONLY | O_CREAT | O_APPEND;
 		ft_lstadd_back(&(cmd_lst->out_redir), node);
 	}
+	ft_lstadd_back(&(cmd_lst->lst_order), node);
 	return (0);
 }
 
