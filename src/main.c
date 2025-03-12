@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: szapata- <szapata-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fosuna-g <fosuna-g@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 13:04:44 by szapata-          #+#    #+#             */
-/*   Updated: 2025/03/06 13:10:35 by szapata-         ###   ########.fr       */
+/*   Updated: 2025/03/12 19:45:58 by fosuna-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,12 +129,14 @@ int	main(int argc, char **argv, char **env)
 		{
 			if (*(data.prompt))
 			{
-				if (!ft_strncmp("exit", data.prompt, 4))
-					break ;
 				add_history(data.prompt);
 				if (!ft_parse(data, cmd_lst))
 					if (!ft_expand(cmd_lst, data.env) && !remove_quotes(cmd_lst))
-						ft_execute(cmd_lst, data.env);	
+					{
+						ft_execute(cmd_lst, data.env);
+						main_builtin(cmd_lst, &data);
+					}
+				
 			}
 		}
 		else 

@@ -59,11 +59,17 @@ int	remove_quotes(t_cmd *cmd_lst);
 void		print_array(char **array);
 void		free_array(char **array);
 char		*my_getenv(char *str, char **env);
-void	ft_file_clear(t_list *files_lst);
+void		ft_file_clear(t_list *files_lst);
+int			double_free(char **ptr);
+int			free_data(t_data *data, t_cmd *cmd_lst, char mode);
 
 
 // EXECUTION
 void	ft_execute(t_cmd *cmd_lst, char **env);
+
+// BUILTINS
+void	main_builtin(t_cmd *cmd_lst, t_data *data);
+void	ft_export(char *var, char *value, char **env);
 
 // PATH
 char		*get_path_line(char **env);
