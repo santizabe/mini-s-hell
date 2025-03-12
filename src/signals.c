@@ -6,7 +6,7 @@
 /*   By: szapata- <szapata-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 13:22:03 by szapata-          #+#    #+#             */
-/*   Updated: 2025/03/03 17:09:47 by szapata-         ###   ########.fr       */
+/*   Updated: 2025/03/11 14:36:48 by szapata-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,10 @@
 void	handle_ctrl_c(int signal)
 {
 	(void)signal;
-	write(1, "\nMinishell", 1);
-	rl_replace_line("", 1); // el 1 es clear_undo = 1, un modo para que no podamos dehacer lo escrito en la line (no tenemos que implementarlo en el proyecto)
+	write(1, "\n", 1);
 	rl_on_new_line();
+	rl_replace_line("", 0);
+	rl_redisplay();
 }
 
 void signals(void)

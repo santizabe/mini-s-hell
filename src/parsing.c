@@ -1,21 +1,16 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parsing.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: szapata- <szapata-@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/03/07 13:26:19 by szapata-          #+#    #+#             */
+/*   Updated: 2025/03/11 15:10:17 by szapata-         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../include/minishell.h"
-
-int	ft_free(void *ptr)
-{
-	free(ptr);
-	return (1);
-}
-
-char	*ft_strjoin2(char *s1, char *s2)
-{
-	if (!s1 && !s2)
-		return (NULL);
-	else if (!s1)
-		return (s2);
-	else if (!s2)
-		return (s1);
-	return (ft_strjoin(s1, s2));
-}
 
 char	set_flags(char **c)
 {
@@ -31,20 +26,6 @@ char	set_flags(char **c)
 		return (4);
 	else
 		return (8);
-}
-
-int	ft_ismeta(char c)
-{
-	if (c == '<' || c == '>')
-		return (1);
-	return (0);
-}
-
-int	ft_isdelimiter(char c)
-{
-	if (c == '>' || c == '<' || c == '|' || c == ' ' || c == '\0')
-		return (1);
-	return (0);
 }
 
 int	redir_handler(char *str, int flags, t_cmd *cmd_lst)
@@ -63,7 +44,7 @@ int	redir_handler(char *str, int flags, t_cmd *cmd_lst)
 	{
 		redir->mode = O_RDONLY;
 		if (flags & 1)
-			redir->mode = -1;	// -1 for here_doc
+			redir->mode = -1;
 		ft_lstadd_back(&(cmd_lst->in_redir), node);
 	}
 	else
@@ -73,7 +54,8 @@ int	redir_handler(char *str, int flags, t_cmd *cmd_lst)
 			redir->mode = O_WRONLY | O_CREAT | O_APPEND;
 		ft_lstadd_back(&(cmd_lst->out_redir), node);
 	}
-	ft_lstadd_back(&(cmd_lst->lst_order), node);
+	if (redir->mode != -1)
+		ft_lstadd_back(&(cmd_lst->lst_order), ft_lstnew(node->content));
 	return (0);
 }
 
