@@ -1,9 +1,9 @@
 # Librerías
 LIBFT = libft/libft.a
+GNL = gnl/get_next_line.c gnl/get_next_line_utils.c
 
 # Flags
 INC = -lreadline -lhistory
-#LFLAGS = -L /home/achacon-/.brew/Cellar/readline/8.2.13/lib -lreadline -lncurses
 CFLAGS = -Wall -Werror -Wextra
 COMPILE = -g
 
@@ -35,11 +35,11 @@ $(NAME): ${OBJT}
 	@make bonus -C libft
 	@echo "$(GREEN)Libft Compiled.$(END)"
 	@echo "$(YELLOW)Compiling Minishell.$(END)"
-	@gcc ${CFLAGS} ${OBJT} ${INC} ${LIBFT} -o ${NAME}
+	@gcc ${CFLAGS} ${OBJT} ${INC} ${LIBFT} ${GNL} -o ${NAME}
 	@echo "$(GREEN)Minishell Compiled.$(END)"
 
 debug: $(LIBFT)
-	@gcc src/*.c $(LIBFT) $(LFLAGS) $(INC) -o paco -g
+	@gcc src/*.c $(LIBFT) $(GNL) $(INC) -o paco -g
 
 $(LIBFT):
 	@make bonus -c libft

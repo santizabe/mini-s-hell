@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fosuna-g <fosuna-g@student.42.fr>          +#+  +:+       +#+        */
+/*   By: szapata- <szapata-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 13:04:44 by szapata-          #+#    #+#             */
-/*   Updated: 2025/03/12 19:45:58 by fosuna-g         ###   ########.fr       */
+/*   Updated: 2025/03/12 20:29:19 by szapata-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,12 +39,14 @@ int	copy_env(char ***dst, char **src)
 	int	i;
 
 	env_len = d_ptrlen(src);
+	if (!env_len)
+		env_len = 1;
 	(*dst) = (char **)malloc((env_len + 1) * sizeof(char *));
 	if (!(*dst))
 		return (-1);
 	(*dst)[env_len] = NULL;
 	i = 0;
-	while (i < env_len)
+	while (src && *src && i < env_len)
 	{
 		(*dst)[i] = ft_strdup(src[i]);
 		if (!(*dst)[i] && double_free((*dst)))
@@ -64,6 +66,19 @@ int	init_data(t_data *data, t_cmd **cmd_lst)
 	return (0);
 }
 
+void	ft_clear_lst_order(t_list **lst, void (*del)(void *))
+{
+	t_list	*tmp;
+	
+	tmp = *lst;
+	while (tmp)
+	{
+		tmp->content = NULL;
+		tmp = tmp->next;
+	}
+	ft_lstclear(lst, del);
+}
+
 int	free_data(t_data *data, t_cmd *cmd_lst, char mode)
 {
 	ft_lstclear(&(cmd_lst->w_lst), free);
@@ -71,7 +86,7 @@ int	free_data(t_data *data, t_cmd *cmd_lst, char mode)
 	ft_file_clear(cmd_lst->out_redir);
 	ft_lstclear(&(cmd_lst->in_redir), free);
 	ft_lstclear(&(cmd_lst->out_redir), free);
-	free(cmd_lst->lst_order);
+	ft_clear_lst_order(&(cmd_lst->lst_order), free);
 	free(cmd_lst);
 	free(data->prompt);
 	if (mode == 1)
@@ -82,7 +97,7 @@ int	free_data(t_data *data, t_cmd *cmd_lst, char mode)
 	return (1);
 }
 
-void	print_data(t_cmd *cmd_lst)
+int	print_data(t_cmd *cmd_lst)
 {
 	t_redir	*redir;
 
@@ -110,13 +125,13 @@ void	print_data(t_cmd *cmd_lst)
 		printf("\n ----------------------\n");
 		cmd_lst = cmd_lst->next;
 	}
+	return (1);
 }
 
 int	main(int argc, char **argv, char **env)
 {
 	t_data	data;
 	t_cmd	*cmd_lst;
-
 	signals();
 	if (argc++ && argv++ && copy_env(&(data.env), env) == -1)
 		return (-1);
@@ -132,11 +147,7 @@ int	main(int argc, char **argv, char **env)
 				add_history(data.prompt);
 				if (!ft_parse(data, cmd_lst))
 					if (!ft_expand(cmd_lst, data.env) && !remove_quotes(cmd_lst))
-					{
-						ft_execute(cmd_lst, data.env);
-						main_builtin(cmd_lst, &data);
-					}
-				
+						ft_execute(cmd_lst, &data);
 			}
 		}
 		else 

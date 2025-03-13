@@ -37,6 +37,7 @@ typedef struct s_cmd
 	t_list			*w_lst;
 	t_list			*in_redir;
 	t_list			*out_redir;
+	t_list			*lst_order;
 	struct	s_cmd	*next;
 }			t_cmd;
 
@@ -46,26 +47,40 @@ void		signals(void);
 void		handle_ctrl_c(int signal);
 
 // PARSING
-int		ft_parse(t_data data, t_cmd *cmd_lst);
+int			ft_parse(t_data data, t_cmd *cmd_lst);
 
 // EXPANSION
-int		ft_expand(t_cmd *cmd_lst, char **env);
-char	*ft_expand_word(char *str, char **env);
+int			ft_expand(t_cmd *cmd_lst, char **env);
+char		*ft_expand_word(char *str, char **env);
 
 // QUOTE REMOVAL
-int	remove_quotes(t_cmd *cmd_lst);
+int			remove_quotes(t_cmd *cmd_lst);
 
 // UTILS
 void		print_array(char **array);
 void		free_array(char **array);
 char		*my_getenv(char *str, char **env);
-void		ft_file_clear(t_list *files_lst);
+void			ft_file_clear(t_list *files_lst);
 int			double_free(char **ptr);
 int			free_data(t_data *data, t_cmd *cmd_lst, char mode);
 
-
 // EXECUTION
-void	ft_execute(t_cmd *cmd_lst, char **env);
+void		ft_execute(t_cmd *cmd_lst, t_data *data);
+char		*search_path(char *word, char **env);
+int			ft_isbuiltin(char *cmd);
+
+// REDIRECTION
+int			open_infile(t_list *f_lst);
+int			open_outfiles(t_list *f_lst);
+int			read_here_docs(t_list *in_lst);
+int			check_files(t_list *redir_lst);
+
+// MISCELANEOUS
+int			ft_isdelimiter(char c);
+int			ft_ismeta(char c);
+int			ft_free(void *ptr);
+char		*ft_strjoin2(char *s1, char *s2);
+
 
 // BUILTINS
 void	main_builtin(t_cmd *cmd_lst, t_data *data);

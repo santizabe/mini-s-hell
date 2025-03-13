@@ -6,7 +6,7 @@
 /*   By: szapata- <szapata-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 22:03:04 by szapata-          #+#    #+#             */
-/*   Updated: 2025/03/02 16:56:38 by szapata-         ###   ########.fr       */
+/*   Updated: 2025/03/12 19:50:13 by szapata-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,11 +60,13 @@ char	*ft_expand_var(char *s1, char *s2, char **env)
 char	*ft_expand_word(char *str, char **env)
 {
 	char	*tmp;
+	char	*tmp2;
 	char	q;
 
-	tmp = str;
+	tmp = ft_strdup(str);
+	tmp2 = str;
 	q = 0;
-	while (str && *str)
+	while (tmp && str && *str)
 	{
 		if (*str == '\"')
 			++q;
@@ -79,5 +81,6 @@ char	*ft_expand_word(char *str, char **env)
 		}
 		str++;
 	}
+	free(tmp2);
 	return (tmp);
 }
