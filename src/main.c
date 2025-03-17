@@ -6,7 +6,7 @@
 /*   By: szapata- <szapata-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 13:04:44 by szapata-          #+#    #+#             */
-/*   Updated: 2025/03/10 19:15:29 by szapata-         ###   ########.fr       */
+/*   Updated: 2025/03/17 14:54:14 by szapata-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,27 +100,31 @@ int	free_data(t_data *data, t_cmd *cmd_lst, char mode)
 int	print_data(t_cmd *cmd_lst)
 {
 	t_redir	*redir;
+	t_list	*tmp;
 
 	while (cmd_lst)
 	{
-		while (cmd_lst->w_lst)
+		tmp = cmd_lst->w_lst;
+		while (tmp)
 		{
-			printf("%s, ", (char *)cmd_lst->w_lst->content);
-			cmd_lst->w_lst = cmd_lst->w_lst->next;
+			printf("%s, ", (char *)tmp->content);
+			tmp = tmp->next;
 		}
 		printf("\n");
-		while (cmd_lst->in_redir)
+		tmp = cmd_lst->in_redir;
+		while (tmp)
 		{
-			redir = (t_redir *)cmd_lst->in_redir->content;
+			redir = (t_redir *)tmp->content;
 			printf("%s, ", redir->file);
-			cmd_lst->in_redir = cmd_lst->in_redir->next;
+			tmp = tmp->next;
 		}
 		printf("\n");
-		while (cmd_lst->out_redir)
+		tmp = cmd_lst->out_redir;
+		while (tmp)
 		{
-			redir = (t_redir *)cmd_lst->out_redir->content;
+			redir = (t_redir *)tmp->content;
 			printf("%s, ", redir->file);
-			cmd_lst->out_redir = cmd_lst->out_redir->next;
+			tmp = tmp->next;
 		}
 		printf("\n ----------------------\n");
 		cmd_lst = cmd_lst->next;
@@ -149,7 +153,7 @@ int	main(int argc, char **argv, char **env)
 				add_history(data.prompt);
 				if (!ft_parse(data, cmd_lst))
 					if (!ft_expand(cmd_lst, data.env) && !remove_quotes(cmd_lst))
-						ft_execute(cmd_lst, data.env);
+						ft_execute(cmd_lst, &data);
 			}
 		}
 		else 

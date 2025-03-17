@@ -43,45 +43,53 @@ typedef struct s_cmd
 
 
 // SIGNALS
-void		signals(void);
-void		handle_ctrl_c(int signal);
+void	signals(void);
+void	handle_ctrl_c(int signal);
 
 // PARSING
-int			ft_parse(t_data data, t_cmd *cmd_lst);
+int		ft_parse(t_data data, t_cmd *cmd_lst);
 
 // EXPANSION
-int			ft_expand(t_cmd *cmd_lst, char **env);
-char		*ft_expand_word(char *str, char **env);
+int		ft_expand(t_cmd *cmd_lst, char **env);
+char	*ft_expand_word(char *str, char **env);
 
 // QUOTE REMOVAL
-int			remove_quotes(t_cmd *cmd_lst);
+int		remove_quotes(t_cmd *cmd_lst);
 
 // UTILS
-void		print_array(char **array);
-void		free_array(char **array);
-char		*my_getenv(char *str, char **env);
-void		ft_file_clear(t_list *files_lst);
+void	print_array(char **array);
+void	free_array(char **array);
+char	*my_getenv(char *str, char **env);
+void	ft_file_clear(t_list *files_lst);
 
 // EXECUTION
-void		ft_execute(t_cmd *cmd_lst, char **env);
-char		*search_path(char *word, char **env);
-int			ft_isbuiltin(char *cmd);
+void	ft_execute(t_cmd *cmd_lst, t_data *data);
+char	*search_path(char *word, char **env);
+int		ft_isbuiltin(char *cmd);
+int		execute_cmd(t_cmd *cmds, t_data *data);
+void	exec_2(t_cmd *cmds, t_data *data, char *path, char **av);
+
+
+// EXECUTION UTILS
+char	**set_argv(t_list *args);
+int		close_multiple(int pipefd[2], int std_tmp[2]);
+int		clo_exec(int pipefd[2], char **argv, char *path, int pid);
+int		print_err(char *str);
 
 // REDIRECTION
-int			open_infile(t_list *f_lst);
-int			open_outfiles(t_list *f_lst);
-int			read_here_docs(t_list *in_lst);
-int			check_files(t_list *redir_lst);
+int		open_infile(t_list *f_lst);
+int		open_outfiles(t_list *f_lst);
+int		read_here_docs(t_list *in_lst);
+int		check_files(t_list *redir_lst);
 
 // MISCELANEOUS
-int			ft_isdelimiter(char c);
-int			ft_ismeta(char c);
-int			ft_free(void *ptr);
-char		*ft_strjoin2(char *s1, char *s2);
-
+int		ft_isdelimiter(char c);
+int		ft_ismeta(char c);
+int		ft_free(void *ptr);
+char	*ft_strjoin2(char *s1, char *s2);
 
 // PATH
-char		*get_path_line(char **env);
-char		*get_path(char *command, char **env);
+char	*get_path_line(char **env);
+char	*get_path(char *command, char **env);
 
 #endif
