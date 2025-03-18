@@ -6,7 +6,7 @@
 /*   By: szapata- <szapata-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/02 16:58:46 by szapata-          #+#    #+#             */
-/*   Updated: 2025/03/17 18:43:58 by szapata-         ###   ########.fr       */
+/*   Updated: 2025/03/17 19:00:44 by szapata-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,20 +48,18 @@ int	exec_cmd(t_cmd *cmd_lst, t_data *data, int std_tmp[2])
 	argv = set_argv(cmd_lst->w_lst);
 	pid = fork();
 	if (pid == -1 && print_err("fork"))
-	return (-1);
+		return (-1);
 	else if (!pid)
 	{
 		close(pipefd[0]);
 		dup2(pipefd[1], STDOUT_FILENO);
 		if (!cmd_lst->next)
 			dup2(std_tmp[1], STDOUT_FILENO);
-		if (cmd_lst->in_redir || cmd_lst->lst_order)
-			set_redir(cmd_lst, std_tmp);
+		set_redir(cmd_lst, std_tmp);
 		close_multiple(pipefd, std_tmp);
 		exec_2(cmd_lst, data, path, argv);
 	}
-	else
-		clo_exec(pipefd, argv, path, pid);
+	clo_exec(pipefd, argv, path, pid);
 	return (pid);
 }
 
@@ -75,7 +73,7 @@ int	exec_multiple(t_cmd *cmd_lst, t_data *data)
 	i = 0;
 	std_tmp[0] = dup(STDIN_FILENO);
 	std_tmp[1] = dup(STDOUT_FILENO);
-	while(cmd_lst)
+	while (cmd_lst)
 	{
 		pid_arr[i++] = exec_cmd(cmd_lst, data, std_tmp);
 		cmd_lst = cmd_lst->next;

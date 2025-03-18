@@ -46,8 +46,18 @@ typedef struct s_cmd
 void	signals(void);
 void	handle_ctrl_c(int signal);
 
+// MAIN UTILS
+int		init_data(t_data *data, t_cmd **cmd_lst);
+int		free_data(t_data *data, t_cmd *cmd_lst, char mode);
+int		double_free(char **ptr);
+
 // PARSING
 int		ft_parse(t_data data, t_cmd *cmd_lst);
+
+// PARSE UTILS
+int		set_redir_mode(t_redir *redir, int flags);
+char	set_flags(char **c);
+char	*iter_prompt(char **prompt);
 
 // EXPANSION
 int		ft_expand(t_cmd *cmd_lst, char **env);
@@ -58,7 +68,7 @@ int		remove_quotes(t_cmd *cmd_lst);
 
 // UTILS
 void	print_array(char **array);
-void	free_array(char **array);
+int		free_array(char **array);
 char	*my_getenv(char *str, char **env);
 void	ft_file_clear(t_list *files_lst);
 

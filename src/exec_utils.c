@@ -6,7 +6,7 @@
 /*   By: szapata- <szapata-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 19:57:33 by szapata-          #+#    #+#             */
-/*   Updated: 2025/03/15 20:01:47 by szapata-         ###   ########.fr       */
+/*   Updated: 2025/03/17 18:54:02 by szapata-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,6 @@ int	close_multiple(int pipefd[2], int std_tmp[2])
 	close (std_tmp[1]);
 	return (0);
 }
-
 
 char	**set_argv(t_list *args)
 {
