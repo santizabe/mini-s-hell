@@ -1,29 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   signals.c                                          :+:      :+:    :+:   */
+/*   exec_2.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: szapata- <szapata-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/26 13:22:03 by szapata-          #+#    #+#             */
-/*   Updated: 2025/03/18 12:24:24 by szapata-         ###   ########.fr       */
+/*   Created: 2025/03/16 20:21:34 by szapata-          #+#    #+#             */
+/*   Updated: 2025/03/18 12:16:58 by szapata-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-void	handle_ctrl_c(int signal)
+void	exec_2(t_cmd *cmds, t_data *data, char *path, char **av)
 {
-	(void)signal;
-	write(1, "\n", 1);
-	rl_on_new_line();
-	rl_replace_line("", 0);
-	rl_redisplay();
-}
-
-void	signals(void)
-{
-	signal(SIGINT, handle_ctrl_c);
-	signal(SIGQUIT, SIG_IGN);
-	signal(SIGTSTP, SIG_IGN);
+	cmds = cmds->next;
+	if (!ft_isbuiltin(av[0]))
+	{
+		execve(path, av, data->env);
+		perror("execve");
+		exit(EXIT_FAILURE);
+	}
+	else
+	{
+		//main_builtin(cmds, data);
+		exit(EXIT_SUCCESS);
+	}
 }

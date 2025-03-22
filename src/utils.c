@@ -6,7 +6,7 @@
 /*   By: szapata- <szapata-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 13:20:25 by szapata-          #+#    #+#             */
-/*   Updated: 2025/03/05 11:50:21 by szapata-         ###   ########.fr       */
+/*   Updated: 2025/03/17 19:05:43 by szapata-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	print_array(char **array)
 	}
 }
 
-void	free_array(char **array)
+int	free_array(char **array)
 {
 	int	i;
 
@@ -35,6 +35,7 @@ void	free_array(char **array)
 		i++;
 	}
 	free(array);
+	return (1);
 }
 
 char	*my_getenv(char *str, char **env)
@@ -60,6 +61,7 @@ void	ft_file_clear(t_list *files_lst)
 	{
 		file = (t_redir *)files_lst->content;
 		free(file->file);
+		file->file = NULL;
 		files_lst = files_lst->next;
 	}
 }

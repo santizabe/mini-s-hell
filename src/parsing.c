@@ -1,51 +1,16 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parsing.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: szapata- <szapata-@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/03/07 13:26:19 by szapata-          #+#    #+#             */
+/*   Updated: 2025/03/18 12:23:13 by szapata-         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../include/minishell.h"
-
-int	ft_free(void *ptr)
-{
-	free(ptr);
-	return (1);
-}
-
-char	*ft_strjoin2(char *s1, char *s2)
-{
-	if (!s1 && !s2)
-		return (NULL);
-	else if (!s1)
-		return (s2);
-	else if (!s2)
-		return (s1);
-	return (ft_strjoin(s1, s2));
-}
-
-char	set_flags(char **c)
-{
-	char	s;
-
-	s = **c;
-	(*c)++;
-	if (s == '<' && **c == '<' && (*c)++)
-		return (1);
-	else if (s == '>' && **c == '>' && (*c)++)
-		return (2);
-	else if (s == '<')
-		return (4);
-	else
-		return (8);
-}
-
-int	ft_ismeta(char c)
-{
-	if (c == '<' || c == '>')
-		return (1);
-	return (0);
-}
-
-int	ft_isdelimiter(char c)
-{
-	if (c == '>' || c == '<' || c == '|' || c == ' ' || c == '\0')
-		return (1);
-	return (0);
-}
 
 int	redir_handler(char *str, int flags, t_cmd *cmd_lst)
 {
@@ -59,21 +24,15 @@ int	redir_handler(char *str, int flags, t_cmd *cmd_lst)
 	node = ft_lstnew(redir);
 	if (!node && ft_free(redir))
 		return (-1);
-	if (flags & 4 || flags & 1)
-	{
-		redir->mode = O_RDONLY;
-		if (flags & 1)
-			redir->mode = -1;	// -1 for here_doc
+	if ((flags & 4 || flags & 1) && set_redir_mode(redir, flags))
 		ft_lstadd_back(&(cmd_lst->in_redir), node);
-	}
 	else
 	{
-		redir->mode = O_RDWR | O_CREAT | O_TRUNC;
-		if (flags & 2)
-			redir->mode = O_WRONLY | O_CREAT | O_APPEND;
+		set_redir_mode(redir, flags);
 		ft_lstadd_back(&(cmd_lst->out_redir), node);
 	}
-	ft_lstadd_back(&(cmd_lst->lst_order), node);
+	if (redir->mode != -1)
+		ft_lstadd_back(&(cmd_lst->lst_order), ft_lstnew(node->content));
 	return (0);
 }
 
@@ -81,7 +40,7 @@ int	add_word_to_list(char *start, char *end, int flags, t_cmd *cmd_lst)
 {
 	char	*str;
 	t_list	*node;
-	
+
 	str = ft_substr(start, 0, end - start);
 	if (!str)
 		return (-1);
@@ -98,25 +57,12 @@ int	add_word_to_list(char *start, char *end, int flags, t_cmd *cmd_lst)
 int	add_word(char **prompt, int flags, t_cmd *cmd_lst)
 {
 	char	*start;
-	char	q;
 
 	while (**prompt == ' ')
 		(*prompt)++;
 	start = *prompt;
-	q = 0;
-	while (!ft_isdelimiter(**prompt))
-	{
-		if (**prompt == '\'' || **prompt == '\"')
-		{
-			q = **prompt;
-			(*prompt)++;
-			(*prompt) = ft_strchr((*prompt), q);
-			if (!(*prompt))
-				return (-1);
-		}
-		(*prompt)++;
-	}
-	if (start == *prompt)
+	*prompt = iter_prompt(prompt);
+	if (!(*prompt) || start == *prompt)
 		return (-1);
 	if (add_word_to_list(start, *prompt, flags, cmd_lst) == -1)
 		return (-1);
@@ -151,7 +97,7 @@ int	ft_parse(t_data data, t_cmd *cmd_lst)
 	while (*prompt != '\0')
 	{
 		flags = 0;
-		while(*prompt == ' ')
+		while (*prompt == ' ')
 			prompt++;
 		if (ft_ismeta(*prompt))
 			flags = set_flags(&prompt);
