@@ -6,7 +6,7 @@
 /*   By: szapata- <szapata-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 19:59:33 by szapata-          #+#    #+#             */
-/*   Updated: 2025/03/18 12:17:11 by szapata-         ###   ########.fr       */
+/*   Updated: 2025/03/24 18:09:15 by szapata-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,8 +63,8 @@ int	execute_cmd(t_cmd *cmds, t_data *data)
 	argv = set_argv(cmds->w_lst);
 	if (!ft_isbuiltin(argv[0]))
 		exec_child(path, argv, cmds, data);
-	// else
-	// 	main_builtin();
+	else
+		main_builtin();
 	free(argv);
 	free(path);
 	return (0);
