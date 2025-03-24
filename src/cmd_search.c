@@ -6,17 +6,11 @@
 /*   By: szapata- <szapata-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 13:05:44 by szapata-          #+#    #+#             */
-/*   Updated: 2025/03/10 19:45:14 by szapata-         ###   ########.fr       */
+/*   Updated: 2025/03/18 12:16:40 by szapata-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
-
-/*
-	search if command is builtin, if it has
-	any slide char '/' it will expand it or
-	search it inside path
-*/
 
 int	ft_isbuiltin(char *cmd)
 {
@@ -24,12 +18,12 @@ int	ft_isbuiltin(char *cmd)
 
 	cmd_len = ft_strlen(cmd);
 	if (cmd_len && (!ft_strncmp(cmd, "cd", cmd_len)
-		|| !ft_strncmp(cmd, "pwd", cmd_len)
-		//|| !ft_strncmp(cmd, "env", cmd_len)
-		|| !ft_strncmp(cmd, "echo", cmd_len)
-		|| !ft_strncmp(cmd, "export", cmd_len)
-		|| !ft_strncmp(cmd, "unset", cmd_len)
-		|| !ft_strncmp(cmd, "exit", cmd_len)))
+			|| !ft_strncmp(cmd, "pwd", cmd_len)
+			|| !ft_strncmp(cmd, "env", cmd_len)
+			|| !ft_strncmp(cmd, "echo", cmd_len)
+			|| !ft_strncmp(cmd, "export", cmd_len)
+			|| !ft_strncmp(cmd, "unset", cmd_len)
+			|| !ft_strncmp(cmd, "exit", cmd_len)))
 		return (1);
 	return (0);
 }
@@ -62,7 +56,6 @@ static char	*search_exec(char *word, char **env)
 	char	*fd_slash;
 	char	*w_tmp;
 	int		sub_lvl;
-
 
 	cwd = my_getenv("PWD", env);
 	cwd = ft_strdup(cwd);

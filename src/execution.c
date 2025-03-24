@@ -6,103 +6,28 @@
 /*   By: szapata- <szapata-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/02 16:58:46 by szapata-          #+#    #+#             */
-/*   Updated: 2025/03/12 20:32:02 by szapata-         ###   ########.fr       */
+/*   Updated: 2025/03/24 12:18:26 by szapata-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-static int	print_err(char *str)
+int	set_redir(t_cmd *cmd_lst, int std_tmp[2])
 {
-	ft_putstr_fd("Minishell: ", STDOUT_FILENO);
-	perror(str);
-	return (1);
-}
+	int	in_fd;
+	int	out_fd;
 
-void	set_argv(t_list *args, char **argv)
-{
-	while (args)
-	{
-		*argv++ = args->content;
-		args = args->next;
-	}
-}
-
-void	print_args_path(char *path, t_list *list, char **env)
-{
-	printf("path: %s\nArgs: ", path);
-	while (list)
-	{
-		printf("%s, ", (char *)list->content);
-			list = list->next;
-	}
-	while (env && *env)
-	{
-		printf("%s\n", *env);
-		env++;
-	}
-	printf("\n");
-}
-
-int	exec_child(char *path, char **argv, char **env)
-{
-	int	pid;
-
-	pid = fork();
-	if (pid == -1 && print_err("fork"))
-		return (-1);
-	else if (!pid)
-	{
-		execve(path, argv, env);
-		perror("execve");
-	}
-	else
-		waitpid(pid, NULL, 0);
-	return (1);
-}
-
-int	execute_cmd(char *path, t_cmd *cmd_lst, t_data *data)
-{
-	char	**argv;
-	int		lstsize;
-
-	if (!path)
-		return (-1);
-	lstsize = ft_lstsize(cmd_lst->w_lst);
-	argv = NULL;
-	if (lstsize)
-		argv = (char **)malloc(sizeof(char *) * (lstsize + 1));
-	argv[lstsize] = NULL;
-	//get_cmd(args);
-	set_argv(cmd_lst->w_lst, argv);
-	if (ft_isbuiltin(argv[0]))
-		main_builtin(cmd_lst, data);
-	else
-		exec_child(path, argv, data->env);
-	free(argv);
-	return (0);
-}
-
-int		exec_simple(t_cmd *cmd_lst, t_data *data)
-{
-	int		in_fd;
-	int		out_fd;
-	char	*path;
-
-	out_fd = 1;
-	in_fd = read_here_docs(cmd_lst->in_redir);
-	if (!check_files(cmd_lst->lst_order))
-	{
-		if (!in_fd && cmd_lst->in_redir)
-			in_fd = open_infile(cmd_lst->in_redir);
-		out_fd = open_outfiles(cmd_lst->out_redir);
-	}
-	path = search_path(cmd_lst->w_lst->content, data->env);
-	if ((dup2(in_fd, STDIN_FILENO) == -1
-		|| dup2(out_fd, STDOUT_FILENO) == -1) && print_err("dup2"))
-		return (-1);
-	execute_cmd(path, cmd_lst, data);
-	free(path);
+	out_fd = STDOUT_FILENO;
+	in_fd = 0;
+	if (cmd_lst->in_redir && dup2(std_tmp[0], STDIN_FILENO) != -1)
+		in_fd = read_here_docs(cmd_lst->in_redir);
+	if (cmd_lst->lst_order && check_files(cmd_lst->lst_order))
+		return (0);
+	if (!in_fd && cmd_lst->in_redir)
+		in_fd = open_infile(cmd_lst->in_redir);
+	out_fd = open_outfiles(cmd_lst->out_redir);
+	if (dup2(in_fd, 0) == -1 || dup2(out_fd, 1) == -1)
+		print_err("dup2");
 	if (in_fd > 2)
 		close(in_fd);
 	if (out_fd > 2)
@@ -110,64 +35,66 @@ int		exec_simple(t_cmd *cmd_lst, t_data *data)
 	return (0);
 }
 
-void	reset_fds(int in, int out)
+int	exec_cmd(t_cmd *cmd_lst, t_data *data, int std_tmp[2])
 {
-	int	tmp;
+	int		pid;
+	int		pipefd[2];
+	char	**argv;
+	char	*path;
 
-	tmp = dup2(in, STDIN_FILENO);
-	if (tmp == -1)
-		print_err("dup2");
-	tmp = dup2(out, STDOUT_FILENO);
-	if (tmp == -1)
-		print_err("dup2");
-	unlink(".msh_here");
-	close(in);
-	close(out);
+	if (pipe(pipefd) == -1 && print_err("pipe"))
+		return (-1);
+	path = search_path(cmd_lst->w_lst->content, data->env);
+	argv = set_argv(cmd_lst->w_lst);
+	pid = fork();
+	if (pid == -1 && print_err("fork"))
+		return (-1);
+	else if (!pid)
+	{
+		close(pipefd[0]);
+		dup2(pipefd[1], STDOUT_FILENO);
+		if (!cmd_lst->next)
+			dup2(std_tmp[1], STDOUT_FILENO);
+		set_redir(cmd_lst, std_tmp);
+		close_multiple(pipefd, std_tmp);
+		exec_2(cmd_lst, data, path, argv);
+	}
+	clo_exec(pipefd, argv, path, pid);
+	return (pid);
 }
 
-// int	set_redir(t_cmd *cmd)
-// {
-// 	int	in;
-// 	int	out;
+int	exec_multiple(t_cmd *cmd_lst, t_data *data)
+{
+	int	i;
+	int	j;
+	int	std_tmp[2];
+	int	pid_arr[99];
 
-// 	in_fd = read_here_docs(cmd_lst->in_redir);
-// 	if (!check_files(cmd_lst->lst_order))
-// 	{
-// 		if (!in_fd && cmd_lst->in_redir)
-// 			in_fd = open_infile(cmd_lst->in_redir);
-// 		out_fd = open_outfiles(cmd_lst->out_redir);
-// 	}
-// }
-
-// int	exec_multiple(t_cmd *cmd_lst, char **env)
-// {
-// 	int	pipe_fd[2];
-
-// 	if (pipe(pipe_fd) == -1 && print_err("pipe"));
-// 		return (-1);
-// 	dup2(pipe_fd[1], STDIN_FILENO);
-// 	while(cmd_lst)
-// 	{
-// 		if (set_redir(cmd_lst))
-// 			exec_cmd();
-// 		cmd_lst = cmd_lst->next;
-// 		dup2(pipe_fd[0], STDIN_FILENO);
-// 		dup2(pipe_fd[1], STDOUT_FILENO);
-// 	}
-// }
+	i = 0;
+	std_tmp[0] = dup(STDIN_FILENO);
+	std_tmp[1] = dup(STDOUT_FILENO);
+	while (cmd_lst)
+	{
+		pid_arr[i++] = exec_cmd(cmd_lst, data, std_tmp);
+		cmd_lst = cmd_lst->next;
+	}
+	j = 0;
+	while (j <= i)
+		if (pid_arr[j++] != -1)
+			waitpid(pid_arr[j], NULL, 0);
+	dup2(std_tmp[0], STDIN_FILENO);
+	dup2(std_tmp[1], STDOUT_FILENO);
+	if ((close(std_tmp[0]) || close(std_tmp[1]))
+		&& print_err("close"))
+		return (-1);
+	return (0);
+}
 
 void	ft_execute(t_cmd *cmd_lst, t_data *data)
 {
-	int	save_in_out[2];
-
-	save_in_out[0] = dup(STDIN_FILENO); // saves stdin fd
-	save_in_out[1] = dup(STDOUT_FILENO); // saves stdout fd
-	if ((save_in_out[0] == -1 || save_in_out[1] == -1)
-		&& print_err("dup"))
-		return ;
 	if (!(cmd_lst->next))
-		exec_simple(cmd_lst, data);
-	// else
-	// 	exec_multiple(cmd_lst, env);
-	reset_fds(save_in_out[0], save_in_out[1]);
+		execute_cmd(cmd_lst, data);
+	else
+		exec_multiple(cmd_lst, data);
+	unlink(".msh_here");
 }
