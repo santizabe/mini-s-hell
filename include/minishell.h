@@ -68,7 +68,7 @@ int		remove_quotes(t_cmd *cmd_lst);
 
 // UTILS
 void		print_array(char **array);
-void		free_array(char **array);
+int			free_array(char **array);
 char		*my_getenv(char *str, char **env);
 void		ft_file_clear(t_list *files_lst);
 int			double_free(char **ptr);
@@ -104,5 +104,8 @@ char	*ft_strjoin2(char *s1, char *s2);
 // PATH
 char	*get_path_line(char **env);
 char	*get_path(char *command, char **env);
+
+// BUILTINS
+void	ft_export(char *var, char *value, char **env);
 
 #endif
