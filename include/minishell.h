@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minishell.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: szapata- <szapata-@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/03/24 18:09:42 by szapata-          #+#    #+#             */
+/*   Updated: 2025/03/24 18:11:00 by szapata-         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
@@ -20,9 +31,9 @@
 
 typedef struct s_data
 {
-    char    **env;
+	char	**env;
 	char	*prompt;
-    char    **array_input;
+	char	**array_input;
 	char	exit_status;
 }			t_data;
 
@@ -38,9 +49,8 @@ typedef struct s_cmd
 	t_list			*in_redir;
 	t_list			*out_redir;
 	t_list			*lst_order;
-	struct	s_cmd	*next;
+	struct s_cmd	*next;
 }			t_cmd;
-
 
 // SIGNALS
 void	signals(void);
@@ -81,7 +91,6 @@ char	*search_path(char *word, char **env);
 int		ft_isbuiltin(char *cmd);
 int		execute_cmd(t_cmd *cmds, t_data *data);
 void	exec_2(t_cmd *cmds, t_data *data, char *path, char **av);
-
 
 // EXECUTION UTILS
 char	**set_argv(t_list *args);
