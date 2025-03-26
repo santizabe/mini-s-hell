@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   path.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: szapata- <szapata-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fernando <fernando@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 13:22:59 by szapata-          #+#    #+#             */
-/*   Updated: 2025/03/17 19:06:19 by szapata-         ###   ########.fr       */
+/*   Updated: 2025/03/26 08:51:06 by fernando         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ char	*get_path(char *command, char **env)
 		path_line = ft_strjoin(path_array[i], "/");
 		path_final = ft_strjoin(path_line, command);
 		free(path_line);
-		if (access(path_final, F_OK) == 0 && free_array(path_array))
+		if ((access(path_final, F_OK) == 0) && free_array(path_array))
 			return (path_final);
 		free(path_final);
 		i++;

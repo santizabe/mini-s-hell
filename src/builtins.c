@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fosuna-g <fosuna-g@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fernando <fernando@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/05 16:56:40 by fosuna-g          #+#    #+#             */
-/*   Updated: 2025/03/12 19:17:01 by fosuna-g         ###   ########.fr       */
+/*   Updated: 2025/03/26 12:18:27 by fernando         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -167,6 +167,14 @@ void	built_exit(t_cmd *cmd_lst, t_data *data)
 	}
 }
 
+
+/**
+ * @brief copies all the string `str` until the int `c` match with 
+ * any character of str
+ * 
+ * @param str is the string that is going to be copied
+ * @param c is the character search
+*/
 char *cpy_first_part_env_var(char *str, int c)
 {
 	char	*res;
@@ -174,12 +182,8 @@ char *cpy_first_part_env_var(char *str, int c)
 	int		j;
 	
 	i = 0;
-	while (str[i])
-	{
-		if (str[i] == c)
-			break;
+	while (str[i] && str[i] != c)
 		i++;
-	}
 	res = (char *)malloc((i + 1) * sizeof(char));
 	if (!res)
 		return (0);
@@ -193,6 +197,9 @@ char *cpy_first_part_env_var(char *str, int c)
 	return (res);
 }
 
+/**
+ * @brief Axuliar function for the main export builtin function
+*/
 void	built_export_aux(t_cmd cmd_lst, t_data *data)
 {
 	char	*value;
@@ -206,20 +213,28 @@ void	built_export_aux(t_cmd cmd_lst, t_data *data)
 		ft_putstr_fd("export: '", 2);
 		ft_putstr_fd(str, 2);
 		ft_putstr_fd("': not a valid identifier\n", 2);
+		free(value);
 		return ;
 	}
 	variable = ft_strchr(str, '=');
-	if (my_getenv(value, data->env))
+	if (variable != NULL && my_getenv(value, data->env))
 		change_values_env(value, variable, data->env);
-	ft_export(value, variable, data->env);
+	else if (variable != NULL)
+		data->env = ft_export(value, variable, data->env);
 	free(value);
 }
 
+/**
+ * @brief function that handle the execution of the export command
+ *
+ * @param cmd_lst is the command list that is given in the input
+ * @param data value of the global program data
+*/
 void	built_export(t_cmd cmd_lst, t_data *data)
 {
 	if (!cmd_lst.w_lst->next)
 	{
-		ft_putstr_fd("Error\n", 2);
+		ft_putstr_fd("Error: export: no arguments received\n", 2);
 		return ;
 	}
 	while (cmd_lst.w_lst->next)
@@ -235,6 +250,14 @@ void	built_unset(t_cmd *cmd_lst, t_data *data)
 	(void)data;
 }
 
+
+/**
+ * @brief It checks which built command is sent and calls the function that
+ * executes that command.
+ *
+ * @param cmd_lst is the command list that is given in the input
+ * @param data value of the global program data
+*/
 void	main_builtin(t_cmd *cmd_lst, t_data *data)
 {
 	char	*cmd;

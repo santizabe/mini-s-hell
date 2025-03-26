@@ -1,0 +1,9 @@
+
+## VScode configurations ##
+.vscode/
+
+## Objects and compile versions ##
+obj/
+minishell
+libft/*.o
+libft/libft.a
