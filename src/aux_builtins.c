@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   aux_builtins.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fernando <fernando@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fosuna-g <fosuna-g@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 18:19:29 by fosuna-g          #+#    #+#             */
-/*   Updated: 2025/03/26 12:21:19 by fernando         ###   ########.fr       */
+/*   Updated: 2025/03/26 17:32:02 by fosuna-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,17 +33,17 @@ char	**create_new_env(const char *env_var, char **env)
 		i++;
 	new_env = (char **)malloc((i + 2) * sizeof(char *));
 	if (new_env == NULL)
-	{
-		write(2, "Error allocating memory", 23);
 		return (NULL);
-	}
 	j = 0;
 	while (j < i)
-		new_env[j] = env[j++];
+	{
+		new_env[j] = env[j];
+		j++;
+	}
 	new_env[j] = ft_strdup(env_var);
 	if (!new_env[j])
 	{
-		write(2, "Error allocating memory", 23);
+		free(new_env);
 		return (NULL);
 	}
 	new_env[j + 1] = NULL;
@@ -68,13 +68,19 @@ char	**ft_export(char *var, char *value, char **env)
 	strlen_value = ft_strlen(value);
 	env_var = (char *)malloc((strlen_var + strlen_value + 2)  * sizeof(char));
 	if (!env_var)
+	{
+		write(2, "Error allocating memory", 23);
 		return (NULL);
+	}
 	ft_memcpy(env_var, var, strlen_var);
 	env_var[strlen_var] = '=';
 	ft_memcpy(env_var + strlen_var + 1, value, strlen_value + 1);
 	new_env = create_new_env(env_var, env);
 	if (!new_env)
+	{
+		write(2, "Error allocating memory", 23);
 		return (NULL);
-	free_array(env);
+	}
+	free(env_var);
 	return(new_env);
 }

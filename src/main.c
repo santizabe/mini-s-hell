@@ -3,14 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fernando <fernando@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fosuna-g <fosuna-g@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 13:04:44 by szapata-          #+#    #+#             */
-/*   Updated: 2025/03/22 16:32:59 by fernando         ###   ########.fr       */
+/*   Updated: 2025/03/26 20:25:51 by fosuna-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
+
+int	exit_status;
 
 int	d_ptrlen(char **ptr)
 {
@@ -87,7 +89,7 @@ void	main_loop(t_data data, t_cmd *cmd_lst)
 	{
 		if (init_data(&data, &cmd_lst) == -1)
 			break ;
-		data.prompt = readline("MiniShell> ");
+		data.prompt = readline("\033[38;5;208mMiniShell> \033[0m");
 		if (data.prompt)
 		{
 			if (*(data.prompt))
@@ -115,6 +117,7 @@ int	main(int argc, char **argv, char **env)
 	signals();
 	if (argc++ && argv++ && copy_env(&(data.env), env) == -1)
 		return (-1);
+	init_msg();
 	main_loop(data, cmd_lst);
 	return (0);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fernando <fernando@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fosuna-g <fosuna-g@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/05 16:56:40 by fosuna-g          #+#    #+#             */
-/*   Updated: 2025/03/26 12:18:27 by fernando         ###   ########.fr       */
+/*   Updated: 2025/03/26 20:33:33 by fosuna-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,51 +52,13 @@ int	change_values_env(char *name, char *str, char **env)
 	return (0);
 }
 
-void	built_cd(t_cmd *cmd_lst, t_data *data)
-{
-	int		err;
-	char	*pwd;
-	char	*next;
-	
-	if (cmd_lst->w_lst->next == NULL)
-	{
-		pwd = my_getenv("PWD", data->env);
-		if (!pwd)
-		{
-			//export pwd gentev(PWD)
-		}
-		next = my_getenv("HOME", data->env);
-		if (!next)
-		{
-			ft_putstr_fd("cd: HOME not set\n", 2);
-			free(pwd);
-			return;
-		}
-		err = chdir(next);
-		change_values_env("PWD", next, data->env);
-		if(change_values_env("OLDPWD", pwd, data->env))
-		{
-			//export OLDPWD pwd
-		}
-	}
-	else
-	{
-		
-		err = chdir(cmd_lst->w_lst->next->content);
-	}
-	if (err)
-		ft_putstr_fd("Error en chdir\n", 2);
-}
-
 void	built_pwd(t_data *data)
 {
 	char	*buffer;
 	
 	buffer = my_getenv("PWD", data->env);
 	if (!buffer)
-	{
-		//export pwd gentev(pwd)
-	}
+		write(2, "pwd: PWD not set\n", 17);
 	if (buffer != NULL)
         printf("%s\n", buffer);
 }
@@ -218,9 +180,9 @@ void	built_export_aux(t_cmd cmd_lst, t_data *data)
 	}
 	variable = ft_strchr(str, '=');
 	if (variable != NULL && my_getenv(value, data->env))
-		change_values_env(value, variable, data->env);
+		change_values_env(value, variable + 1, data->env);
 	else if (variable != NULL)
-		data->env = ft_export(value, variable, data->env);
+		data->env = ft_export(value, variable + 1, data->env);
 	free(value);
 }
 

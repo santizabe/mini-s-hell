@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fernando <fernando@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fosuna-g <fosuna-g@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 18:09:42 by szapata-          #+#    #+#             */
-/*   Updated: 2025/03/26 12:19:21 by fernando         ###   ########.fr       */
+/*   Updated: 2025/03/26 20:21:31 by fosuna-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,7 @@ char		*my_getenv(char *str, char **env);
 void		ft_file_clear(t_list *files_lst);
 int			double_free(char **ptr);
 int			free_data(t_data *data, t_cmd *cmd_lst, char mode);
+void    	init_msg();
 
 
 // EXECUTION
@@ -117,5 +118,10 @@ char	*get_path(char *command, char **env);
 // BUILTINS
 void	main_builtin(t_cmd *cmd_lst, t_data *data);
 char	**ft_export(char *var, char *value, char **env);
+int		built_cd_old(char **env);
+int		built_cd_path(char *path, char **env);
+int		built_cd_home(char **env);
+void	built_cd(t_cmd *cmd_lst, t_data *data);
+int		change_values_env(char *name, char *str, char **env);
 
 #endif
