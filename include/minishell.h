@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minishell.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: szapata- <szapata-@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/03/24 18:09:42 by szapata-          #+#    #+#             */
+/*   Updated: 2025/03/29 16:00:10 by szapata-         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
@@ -20,9 +31,9 @@
 
 typedef struct s_data
 {
-    char    **env;
+	char	**env;
 	char	*prompt;
-    char    **array_input;
+	char	**array_input;
 	char	exit_status;
 }			t_data;
 
@@ -38,9 +49,8 @@ typedef struct s_cmd
 	t_list			*in_redir;
 	t_list			*out_redir;
 	t_list			*lst_order;
-	struct	s_cmd	*next;
+	struct s_cmd	*next;
 }			t_cmd;
-
 
 // SIGNALS
 void	signals(void);
@@ -73,6 +83,7 @@ char		*my_getenv(char *str, char **env);
 void		ft_file_clear(t_list *files_lst);
 int			double_free(char **ptr);
 int			free_data(t_data *data, t_cmd *cmd_lst, char mode);
+void    	init_msg();
 
 
 // EXECUTION
@@ -81,7 +92,6 @@ char	*search_path(char *word, char **env);
 int		ft_isbuiltin(char *cmd);
 int		execute_cmd(t_cmd *cmds, t_data *data);
 void	exec_2(t_cmd *cmds, t_data *data, char *path, char **av);
-
 
 // EXECUTION UTILS
 char	**set_argv(t_list *args);
@@ -106,6 +116,12 @@ char	*get_path_line(char **env);
 char	*get_path(char *command, char **env);
 
 // BUILTINS
-void	ft_export(char *var, char *value, char **env);
+void	main_builtin(t_cmd *cmd_lst, t_data *data);
+char	**ft_export(char *var, char *value, char **env);
+int		built_cd_old(char **env);
+int		built_cd_path(char *path, char **env);
+int		built_cd_home(char **env);
+void	built_cd(t_cmd *cmd_lst, t_data *data);
+int		change_values_env(char *name, char *str, char **env);
 
 #endif

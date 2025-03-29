@@ -6,11 +6,13 @@
 /*   By: szapata- <szapata-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 13:04:44 by szapata-          #+#    #+#             */
-/*   Updated: 2025/03/24 12:19:54 by szapata-         ###   ########.fr       */
+/*   Updated: 2025/03/29 16:00:37 by szapata-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
+
+int	exit_status;
 
 int	d_ptrlen(char **ptr)
 {
@@ -87,7 +89,7 @@ void	main_loop(t_data data, t_cmd *cmd_lst)
 	{
 		if (init_data(&data, &cmd_lst) == -1)
 			break ;
-		data.prompt = readline("MiniShell> ");
+		data.prompt = readline("\033[38;5;208mMiniShell> \033[0m");
 		if (data.prompt)
 		{
 			if (*(data.prompt))
@@ -115,6 +117,7 @@ int	main(int argc, char **argv, char **env)
 	signals();
 	if (argc++ && argv++ && copy_env(&(data.env), env) == -1)
 		return (-1);
+	init_msg();
 	main_loop(data, cmd_lst);
 	return (0);
 }
