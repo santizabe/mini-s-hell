@@ -3,15 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fosuna-g <fosuna-g@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fernando <fernando@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/05 16:56:40 by fosuna-g          #+#    #+#             */
-/*   Updated: 2025/03/26 20:33:33 by fosuna-g         ###   ########.fr       */
+/*   Updated: 2025/04/06 14:12:28 by fernando         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
+/**
+ * @brief Checks if a string represents a valid integer number.
+ * 
+ * @param str String to check (e.g., "-123", "+456", "789").
+ * @return 1 if the string is a valid integer (optional sign + digits), 0 otherwise.
+ */
 int	ft_isnum(char *str)
 {
 	int i;
@@ -26,7 +32,14 @@ int	ft_isnum(char *str)
 	}
 	return (1);
 }
-
+/**
+ * @brief Updates an environment variable's value in the given environment array.
+ * 
+ * @param name Name of the variable to update (e.g., "PATH").
+ * @param str New value to assign (e.g., "/usr/local/bin").
+ * @param env Environment array (NULL-terminated strings, e.g., `environ`).
+ * @return 1 if the variable was found and updated, 0 otherwise.
+ */
 int	change_values_env(char *name, char *str, char **env)
 {
 	int		strlen;
@@ -52,6 +65,9 @@ int	change_values_env(char *name, char *str, char **env)
 	return (0);
 }
 
+/**
+ * @brief It search the actual env variable of PWD.
+ */
 void	built_pwd(t_data *data)
 {
 	char	*buffer;
@@ -63,6 +79,10 @@ void	built_pwd(t_data *data)
         printf("%s\n", buffer);
 }
 
+
+/**
+ * @brief It does the same as echo but checks if it has missed the -n flag.
+ */
 void	built_echo(t_cmd cmd_lst)
 {
 	int		flag;
@@ -88,6 +108,9 @@ void	built_echo(t_cmd cmd_lst)
 		ft_putstr_fd("\n", 1);
 }
 
+/**
+ * @brief prints all the envirinements variables
+ */
 void	built_env(t_cmd *cmd_lst, char **env)
 {
 	if (cmd_lst->w_lst->next != NULL)
@@ -103,6 +126,10 @@ void	built_env(t_cmd *cmd_lst, char **env)
 	}
 }
 
+/**
+ * @brief frees all the memory and exit with a code or with 0
+ * if there is't any argument
+ */
 void	built_exit(t_cmd *cmd_lst, t_data *data)
 {
 	int	num;
@@ -212,11 +239,10 @@ void	built_unset(t_cmd *cmd_lst, t_data *data)
 	(void)data;
 }
 
-
 /**
  * @brief It checks which built command is sent and calls the function that
  * executes that command.
- *
+ * 
  * @param cmd_lst is the command list that is given in the input
  * @param data value of the global program data
 */
@@ -231,18 +257,18 @@ void	main_builtin(t_cmd *cmd_lst, t_data *data)
 		exit(-1);
 	}
 	cmd = cmd_lst->w_lst->content;
-	if (!ft_strncmp(cmd, "cd", ft_strlen(cmd)))
+	if (!ft_strncmp(cmd, "cd", ft_strlen("cd")))
 		built_cd(cmd_lst, data);
-	else if (!ft_strncmp(cmd, "exit", ft_strlen(cmd)))
+	else if (!ft_strncmp(cmd, "exit", ft_strlen("exit")))
 		built_exit(cmd_lst, data);
-	else if (!ft_strncmp(cmd, "echo", ft_strlen(cmd)))
+	else if (!ft_strncmp(cmd, "echo", ft_strlen("echo")))
 		built_echo(*cmd_lst);
-	else if (!ft_strncmp(cmd, "pwd", ft_strlen(cmd)))
+	else if (!ft_strncmp(cmd, "pwd", ft_strlen("pwd")))
 		built_pwd(data);
-	else if (!ft_strncmp(cmd, "env", ft_strlen(cmd)))
+	else if (!ft_strncmp(cmd, "env", ft_strlen("env")))
 		built_env(cmd_lst, data->env);
-	else if (!ft_strncmp(cmd, "export", ft_strlen(cmd)))
+	else if (!ft_strncmp(cmd, "export", ft_strlen("export")))
 		built_export(*cmd_lst, data);
-	else if (!ft_strncmp(cmd, "unset", ft_strlen(cmd)))
+	else if (!ft_strncmp(cmd, "unset", ft_strlen("unset")))
 		built_unset(cmd_lst, data);
 }
