@@ -6,7 +6,7 @@
 /*   By: fosuna-g <fosuna-g@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 18:09:42 by szapata-          #+#    #+#             */
-/*   Updated: 2025/03/26 20:21:31 by fosuna-g         ###   ########.fr       */
+/*   Updated: 2025/04/09 19:46:27 by fosuna-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,8 +83,8 @@ char		*my_getenv(char *str, char **env);
 void		ft_file_clear(t_list *files_lst);
 int			double_free(char **ptr);
 int			free_data(t_data *data, t_cmd *cmd_lst, char mode);
-void    	init_msg();
-
+void		init_msg();
+int			ft_isnum(char *str);
 
 // EXECUTION
 void	ft_execute(t_cmd *cmd_lst, t_data *data);
@@ -123,5 +123,13 @@ int		built_cd_path(char *path, char **env);
 int		built_cd_home(char **env);
 void	built_cd(t_cmd *cmd_lst, t_data *data);
 int		change_values_env(char *name, char *str, char **env);
+void	built_export(t_cmd cmd_lst, t_data *data);
+void	built_unset(t_cmd cmd_lst, char **env);
+
+// BUILTINS UTILS
+char	*ft_strjoin3(char *s1, char *s2, int b1, int b2);
+int		manage_pp(char *path, char *pwd, int i);
+void	built_export_aux(t_cmd cmd_lst, t_data *data);
+char	*rebuild_path(char *path, char *pwd);
 
 #endif

@@ -6,11 +6,101 @@
 /*   By: fosuna-g <fosuna-g@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 18:19:29 by fosuna-g          #+#    #+#             */
-/*   Updated: 2025/03/26 17:32:02 by fosuna-g         ###   ########.fr       */
+/*   Updated: 2025/04/09 18:40:53 by fosuna-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
+
+/**
+ * @brief Reconstructs an absolute path from relative components.  
+ *  
+ * @param path Relative path to process.  
+ * @param pwd Current working directory (modified/freed if needed).  
+ * @return Newly allocated absolute path, or NULL if invalid.
+ */
+char	*rebuild_path(char *path, char *pwd)
+{
+	int		i;
+	char	*res;
+	
+	i = 0;
+	while (!ft_strncmp(&path[i], "./", 2))
+		i += 2;
+	if (i > 0)
+	{
+		path = &path[i];
+		i = 0;
+	}
+	i = manage_pp(path, pwd, i);
+	if (i < 0)
+	{
+		free(pwd);
+		return (NULL);
+	}
+	res = pwd;
+	if (pwd[ft_strlen(pwd) - 1] != '/' && path[i] != '/')
+		res = ft_strjoin3(res, "/", 1, 0);
+	if (path[i])
+		res = ft_strjoin3(res, ft_strdup(path + i), 1, 1);
+	return (res);
+}
+
+/**
+ * @brief copies all the string `str` until the int `c` match with 
+ * any character of str, axiliar function user for export.
+ * 
+ * @param str is the string that is going to be copied
+ * @param c is the character search
+*/
+char *cpy_first_part_env_var(char *str, int c)
+{
+	char	*res;
+	int		i;
+	int		j;
+	
+	i = 0;
+	while (str[i] && str[i] != c)
+		i++;
+	res = (char *)malloc((i + 1) * sizeof(char));
+	if (!res)
+		return (0);
+	j = 0;
+	while (j < i)
+	{
+		res[j] = str[j];
+		j++;
+	}
+	res[j] = '\0';
+	return (res);
+}
+
+/**
+ * @brief Axuliar function for the main export builtin function
+*/
+void	built_export_aux(t_cmd cmd_lst, t_data *data)
+{
+	char	*value;
+	char	*variable;
+	char	*str;
+
+	str = cmd_lst.w_lst->next->content;
+	value = cpy_first_part_env_var(str, '=');
+	if (!(value) || (value[0] == '\0'))
+	{
+		ft_putstr_fd("export: '", 2);
+		ft_putstr_fd(str, 2);
+		ft_putstr_fd("': not a valid identifier\n", 2);
+		free(value);
+		return ;
+	}
+	variable = ft_strchr(str, '=');
+	if (variable != NULL && my_getenv(value, data->env))
+		change_values_env(value, variable + 1, data->env);
+	else if (variable != NULL)
+		data->env = ft_export(value, variable + 1, data->env);
+	free(value);
+}
 
 /**
  * @brief It creates a new array with a new env variable `env_var` added.

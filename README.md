@@ -58,7 +58,10 @@ make
 ./minishell
 ```
 
-> ⚠️ **Note:** If `readline` is missing, compilation will fail.
+> [!NOTE]
+> If `readline` is missing, compilation will fail.
+
+---
 
 ## 🚀 Usage
 ```bash
@@ -68,6 +71,8 @@ minishell> echo "Hello $USER"      # Env var expansion
 minishell> cat < input.txt > output.txt  # Redirections  
 minishell> exit  # Quit shell  
 ```
+
+---
 
 ## 🔧 Built-ins
 | Command                  | Description                     |
@@ -80,6 +85,7 @@ minishell> exit  # Quit shell
 | `env`                    | List environment variables      |
 | `exit [status]`          | Quit shell (optional exit code) |
 
+---
 
 ## 🌍 Environment Variables
 - Inherits parent shell env (`PATH`, `HOME`, `USER`, etc.).
@@ -100,6 +106,7 @@ minishell> cat << EOF
 > Hello, Minishell!  
 > EOF  
 ```
+---
 
 ## 👥 Authors
 
