@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins2.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fosuna-g <fosuna-g@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fernando <fernando@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 18:34:54 by fosuna-g          #+#    #+#             */
-/*   Updated: 2025/04/09 20:15:41 by fosuna-g         ###   ########.fr       */
+/*   Updated: 2025/04/11 20:51:44 by fernando         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,8 @@ void	built_unset_aux(char *variable, char **env)
 	i = 0;
 	while (env[i])
 	{
-		if (!ft_strncmp(env[i], variable, ft_strlen(variable)) &&
-			env[i][ft_strlen(variable)] == '=')
+		if (!ft_strncmp(env[i], variable, ft_strlen(variable))
+			&& env[i][ft_strlen(variable)] == '=')
 		{
 			free(env[i]);
 			env[i] = NULL;
@@ -30,7 +30,7 @@ void	built_unset_aux(char *variable, char **env)
 				i++;
 			}
 			env[i] = NULL;
-			break;
+			break ;
 		}
 		i++;
 	}
@@ -39,7 +39,8 @@ void	built_unset_aux(char *variable, char **env)
 /**
  * @brief Removes environment variables specified in the command.
  * 
- * Iterates through command arguments and removes each variable from the environment
+ * Iterates through command arguments and removes each variable from the 
+ * environment
  * 
  * if it exists, uses helper function built_unset_aux() to perform the removal.
  * 

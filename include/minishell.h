@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fosuna-g <fosuna-g@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fernando <fernando@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 18:09:42 by szapata-          #+#    #+#             */
-/*   Updated: 2025/04/09 19:46:27 by fosuna-g         ###   ########.fr       */
+/*   Updated: 2025/04/11 21:14:23 by fernando         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,14 +77,14 @@ char	*ft_expand_word(char *str, char **env);
 int		remove_quotes(t_cmd *cmd_lst);
 
 // UTILS
-void		print_array(char **array);
-int			free_array(char **array);
-char		*my_getenv(char *str, char **env);
-void		ft_file_clear(t_list *files_lst);
-int			double_free(char **ptr);
-int			free_data(t_data *data, t_cmd *cmd_lst, char mode);
-void		init_msg();
-int			ft_isnum(char *str);
+void	print_array(char **array);
+int		free_array(char **array);
+char	*my_getenv(char *str, char **env);
+void	ft_file_clear(t_list *files_lst);
+int		double_free(char **ptr);
+int		free_data(t_data *data, t_cmd *cmd_lst, char mode);
+void	init_msg(void);
+int		ft_isnum(char *str);
 
 // EXECUTION
 void	ft_execute(t_cmd *cmd_lst, t_data *data);

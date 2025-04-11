@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fosuna-g <fosuna-g@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fernando <fernando@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/05 16:56:40 by fosuna-g          #+#    #+#             */
-/*   Updated: 2025/04/09 19:46:53 by fosuna-g         ###   ########.fr       */
+/*   Updated: 2025/04/11 21:10:44 by fernando         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,14 +18,13 @@
 void	built_pwd(t_data *data)
 {
 	char	*buffer;
-	
+
 	buffer = my_getenv("PWD", data->env);
 	if (!buffer)
 		write(2, "pwd: PWD not set\n", 17);
 	if (buffer != NULL)
-        printf("%s\n", buffer);
+		printf("%s\n", buffer);
 }
-
 
 /**
  * @brief It does the same as echo but checks if it has missed the -n flag.
@@ -65,7 +64,7 @@ void	built_env(t_cmd *cmd_lst, char **env)
 		ft_putstr_fd("env: too much parameters\n", 2);
 		return ;
 	}
-	while(*env)
+	while (*env)
 	{
 		ft_putstr_fd(*env, 1);
 		write(1, "\n", 1);
@@ -113,7 +112,7 @@ void	built_exit(t_cmd *cmd_lst, t_data *data)
 void	main_builtin(t_cmd *cmd_lst, t_data *data)
 {
 	char	*cmd;
-	
+
 	if (cmd_lst->w_lst == NULL)
 	{
 		write(1, "La lista es nula\n", 17);

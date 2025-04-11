@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   aux_builtins.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fosuna-g <fosuna-g@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fernando <fernando@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 18:19:29 by fosuna-g          #+#    #+#             */
-/*   Updated: 2025/04/09 18:40:53 by fosuna-g         ###   ########.fr       */
+/*   Updated: 2025/04/11 21:12:11 by fernando         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ char	*rebuild_path(char *path, char *pwd)
 {
 	int		i;
 	char	*res;
-	
+
 	i = 0;
 	while (!ft_strncmp(&path[i], "./", 2))
 		i += 2;
@@ -53,12 +53,12 @@ char	*rebuild_path(char *path, char *pwd)
  * @param str is the string that is going to be copied
  * @param c is the character search
 */
-char *cpy_first_part_env_var(char *str, int c)
+char	*cpy_first_part_env_var(char *str, int c)
 {
 	char	*res;
 	int		i;
 	int		j;
-	
+
 	i = 0;
 	while (str[i] && str[i] != c)
 		i++;
@@ -152,11 +152,10 @@ char	**ft_export(char *var, char *value, char **env)
 	char	*env_var;
 	char	**new_env;
 	int		strlen_var;
-	int		strlen_value;
 
 	strlen_var = ft_strlen(var);
-	strlen_value = ft_strlen(value);
-	env_var = (char *)malloc((strlen_var + strlen_value + 2)  * sizeof(char));
+	env_var = (char *)malloc((strlen_var + ft_strlen(value) + 2)
+			* sizeof(char));
 	if (!env_var)
 	{
 		write(2, "Error allocating memory", 23);
@@ -164,13 +163,15 @@ char	**ft_export(char *var, char *value, char **env)
 	}
 	ft_memcpy(env_var, var, strlen_var);
 	env_var[strlen_var] = '=';
-	ft_memcpy(env_var + strlen_var + 1, value, strlen_value + 1);
+	ft_memcpy(env_var + strlen_var + 1, value, ft_strlen(value) + 1);
 	new_env = create_new_env(env_var, env);
 	if (!new_env)
 	{
+		free(env_var);
 		write(2, "Error allocating memory", 23);
 		return (NULL);
 	}
+	free(env);
 	free(env_var);
-	return(new_env);
+	return (new_env);
 }

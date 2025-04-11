@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fosuna-g <fosuna-g@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fernando <fernando@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 18:10:12 by fosuna-g          #+#    #+#             */
-/*   Updated: 2025/04/09 18:33:07 by fosuna-g         ###   ########.fr       */
+/*   Updated: 2025/04/11 20:58:25 by fernando         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
  * @param pwd Current working directory (modified in place).  
  * @param i Starting index in path.  
  * @return New index after processing, or -1 if path escapes root.  
- */ 
+ */
 int	manage_pp(char *path, char *pwd, int i)
 {
 	int	cntp;
@@ -27,7 +27,7 @@ int	manage_pp(char *path, char *pwd, int i)
 
 	cntp = 0;
 	len = ft_strlen(pwd) - 1;
-	while (path[i] && path[i + 1] && !ft_strncmp(&path[i],"..", 2))
+	while (path[i] && path[i + 1] && !ft_strncmp(&path[i], "..", 2))
 	{
 		cntp++;
 		i += 2;
@@ -52,16 +52,17 @@ int	manage_pp(char *path, char *pwd, int i)
  * @brief Checks if a string represents a valid integer number.
  * 
  * @param str String to check (e.g., "-123", "+456", "789").
- * @return 1 if the string is a valid integer (optional sign + digits), 0 otherwise.
+ * @return 1 if the string is a valid integer (optional sign + digits), 
+ * 0 otherwise.
  */
 int	ft_isnum(char *str)
 {
-	int i;
-	
+	int	i;
+
 	i = 0;
 	if (str[i] == '-' || str[i] == '+')
 		i++;
-	while(str[i])
+	while (str[i])
 	{
 		if (!ft_isdigit(str[i++]))
 			return (0);
@@ -83,11 +84,12 @@ int	change_values_env(char *name, char *str, char **env)
 	char	*new_env;
 
 	strlen = ft_strlen(name);
-	while(*env)
+	while (*env)
 	{
 		if (!ft_strncmp(name, *env, strlen) && (*env)[strlen] == '=')
 		{
-			new_env = (char *)malloc((strlen + ft_strlen(str) + 2)  * sizeof(char));
+			new_env = (char *)malloc((strlen + ft_strlen(str) + 2)
+					* sizeof(char));
 			if (!new_env)
 				return (0);
 			ft_memcpy(new_env, name, strlen);
@@ -110,11 +112,10 @@ char	*ft_strjoin3(char *s1, char *s2, int b1, int b2)
 	char	*res;
 
 	if (!s1 || !s2)
-		return NULL;
-	
+		return (NULL);
 	res = ft_strjoin2(s1, s2);
 	if (!res)
-		return NULL;
+		return (NULL);
 	if (b1)
 		free(s1);
 	if (b2)
