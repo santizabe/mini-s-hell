@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_simple.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fernando <fernando@student.42.fr>          +#+  +:+       +#+        */
+/*   By: szapata- <szapata-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 19:59:33 by szapata-          #+#    #+#             */
-/*   Updated: 2025/03/26 08:38:22 by fernando         ###   ########.fr       */
+/*   Updated: 2025/04/24 13:27:17 by szapata-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,12 +43,13 @@ int	exec_child(char *path, char **argv, t_cmd *cmds, t_data *data)
 		return (-1);
 	else if (!pid)
 	{
+		signal(SIGINT, SIG_DFL);
 		set_redirs(cmds);
 		execve(path, argv, data->env);
 		perror("execve");
 	}
 	else
-		waitpid(pid, NULL, 0);
+		waitpid(pid, &data->exit_status, 0);
 	return (1);
 }
 
@@ -57,7 +58,7 @@ int	execute_cmd(t_cmd *cmds, t_data *data)
 	char	**argv;
 	char	*path;
 
-	path = search_path(cmds->w_lst->content, data->env);
+	path = search_path(cmds->w_lst->content, data);
 	if (!path)
 		return (-1);
 	argv = set_argv(cmds->w_lst);

@@ -6,7 +6,7 @@
 /*   By: szapata- <szapata-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 18:09:42 by szapata-          #+#    #+#             */
-/*   Updated: 2025/03/29 16:00:10 by szapata-         ###   ########.fr       */
+/*   Updated: 2025/04/23 20:30:34 by szapata-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ typedef struct s_data
 	char	**env;
 	char	*prompt;
 	char	**array_input;
-	char	exit_status;
+	int		exit_status;
 }			t_data;
 
 typedef struct s_redir
@@ -51,6 +51,8 @@ typedef struct s_cmd
 	t_list			*lst_order;
 	struct s_cmd	*next;
 }			t_cmd;
+
+extern int	g_exit_status;
 
 // SIGNALS
 void	signals(void);
@@ -70,25 +72,26 @@ char	set_flags(char **c);
 char	*iter_prompt(char **prompt);
 
 // EXPANSION
-int		ft_expand(t_cmd *cmd_lst, char **env);
-char	*ft_expand_word(char *str, char **env);
+int		ft_expand(t_cmd *cmd_lst, t_data *data);
+char	*ft_expand_word(char *str, t_data *data);
 
 // QUOTE REMOVAL
 int		remove_quotes(t_cmd *cmd_lst);
 
 // UTILS
-void		print_array(char **array);
-int			free_array(char **array);
-char		*my_getenv(char *str, char **env);
-void		ft_file_clear(t_list *files_lst);
-int			double_free(char **ptr);
-int			free_data(t_data *data, t_cmd *cmd_lst, char mode);
-void    	init_msg();
-
+void	print_array(char **array);
+int		free_array(char **array);
+char	*my_getenv(char *str, char **env);
+void	ft_file_clear(t_list *files_lst);
+int		double_free(char **ptr);
+int		free_data(t_data *data, t_cmd *cmd_lst, char mode);
+void	init_msg(void);
+int		ft_isnum(char *str);
+int		my_free(void *ptr);
 
 // EXECUTION
 void	ft_execute(t_cmd *cmd_lst, t_data *data);
-char	*search_path(char *word, char **env);
+char	*search_path(char *word, t_data *data);
 int		ft_isbuiltin(char *cmd);
 int		execute_cmd(t_cmd *cmds, t_data *data);
 void	exec_2(t_cmd *cmds, t_data *data, char *path, char **av);
@@ -113,7 +116,7 @@ char	*ft_strjoin2(char *s1, char *s2);
 
 // PATH
 char	*get_path_line(char **env);
-char	*get_path(char *command, char **env);
+char	*get_path(char *command, t_data *data);
 
 // BUILTINS
 void	main_builtin(t_cmd *cmd_lst, t_data *data);
@@ -123,5 +126,13 @@ int		built_cd_path(char *path, char **env);
 int		built_cd_home(char **env);
 void	built_cd(t_cmd *cmd_lst, t_data *data);
 int		change_values_env(char *name, char *str, char **env);
+void	built_export(t_cmd cmd_lst, t_data *data);
+void	built_unset(t_cmd cmd_lst, char **env);
+
+// BUILTINS UTILS
+char	*ft_strjoin3(char *s1, char *s2, int b1, int b2);
+int		manage_pp(char *path, char *pwd, int i);
+void	built_export_aux(t_cmd cmd_lst, t_data *data);
+char	*rebuild_path(char *path, char *pwd);
 
 #endif

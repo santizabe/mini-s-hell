@@ -3,20 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   path.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fernando <fernando@student.42.fr>          +#+  +:+       +#+        */
+/*   By: szapata- <szapata-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 13:22:59 by szapata-          #+#    #+#             */
-/*   Updated: 2025/03/26 08:51:06 by fernando         ###   ########.fr       */
+/*   Updated: 2025/04/23 20:26:44 by szapata-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-void	print_cmd_err(char *cmd)
+void	print_cmd_err(char *cmd, t_data *data)
 {
 	ft_putstr_fd("Command '", STDERR_FILENO);
 	ft_putstr_fd(cmd, STDERR_FILENO);
 	ft_putstr_fd("' not found\n", STDERR_FILENO);
+	data->exit_status = 127;
 }
 
 char	*get_path_line(char **env)
@@ -37,7 +38,7 @@ char	*get_path_line(char **env)
 	return (path_line);
 }
 
-char	*get_path(char *command, char **env)
+char	*get_path(char *command, t_data *data)
 {
 	char	*path_line;
 	char	**path_array;
@@ -45,7 +46,7 @@ char	*get_path(char *command, char **env)
 	int		i;
 
 	i = 0;
-	path_line = get_path_line(env);
+	path_line = get_path_line(data->env);
 	if (!path_line)
 		return (ft_strdup(command));
 	path_array = ft_split(path_line, ':');
@@ -60,6 +61,6 @@ char	*get_path(char *command, char **env)
 		i++;
 	}
 	free_array(path_array);
-	print_cmd_err(command);
+	print_cmd_err(command, data);
 	return (NULL);
 }

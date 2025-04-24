@@ -6,7 +6,7 @@
 /*   By: szapata- <szapata-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/16 20:21:34 by szapata-          #+#    #+#             */
-/*   Updated: 2025/03/24 18:09:20 by szapata-         ###   ########.fr       */
+/*   Updated: 2025/04/23 17:58:10 by szapata-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 
 void	exec_2(t_cmd *cmds, t_data *data, char *path, char **av)
 {
-	cmds = cmds->next;
 	if (!ft_isbuiltin(av[0]))
 	{
 		execve(path, av, data->env);

@@ -6,7 +6,7 @@
 /*   By: szapata- <szapata-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 13:20:25 by szapata-          #+#    #+#             */
-/*   Updated: 2025/03/17 19:05:43 by szapata-         ###   ########.fr       */
+/*   Updated: 2025/04/23 17:59:22 by szapata-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,4 +64,10 @@ void	ft_file_clear(t_list *files_lst)
 		file->file = NULL;
 		files_lst = files_lst->next;
 	}
+}
+
+int	my_free(void *ptr)
+{
+	free(ptr);
+	return (1);
 }

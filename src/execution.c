@@ -6,7 +6,7 @@
 /*   By: szapata- <szapata-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/02 16:58:46 by szapata-          #+#    #+#             */
-/*   Updated: 2025/03/24 12:18:26 by szapata-         ###   ########.fr       */
+/*   Updated: 2025/04/24 16:03:00 by szapata-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ int	exec_cmd(t_cmd *cmd_lst, t_data *data, int std_tmp[2])
 
 	if (pipe(pipefd) == -1 && print_err("pipe"))
 		return (-1);
-	path = search_path(cmd_lst->w_lst->content, data->env);
+	path = search_path(cmd_lst->w_lst->content, data);
 	argv = set_argv(cmd_lst->w_lst);
 	pid = fork();
 	if (pid == -1 && print_err("fork"))
@@ -81,7 +81,7 @@ int	exec_multiple(t_cmd *cmd_lst, t_data *data)
 	j = 0;
 	while (j <= i)
 		if (pid_arr[j++] != -1)
-			waitpid(pid_arr[j], NULL, 0);
+			waitpid(pid_arr[j], &data->exit_status, 0);
 	dup2(std_tmp[0], STDIN_FILENO);
 	dup2(std_tmp[1], STDOUT_FILENO);
 	if ((close(std_tmp[0]) || close(std_tmp[1]))
@@ -92,9 +92,20 @@ int	exec_multiple(t_cmd *cmd_lst, t_data *data)
 
 void	ft_execute(t_cmd *cmd_lst, t_data *data)
 {
+	int	ret;
+
+	ret = 0;
+	g_exit_status = 1;
 	if (!(cmd_lst->next))
-		execute_cmd(cmd_lst, data);
+		ret = execute_cmd(cmd_lst, data);
 	else
 		exec_multiple(cmd_lst, data);
+	if (ret == 0)
+	{
+		if (WIFSIGNALED(data->exit_status))
+			data->exit_status = 128 + WTERMSIG(data->exit_status);
+		else if (WIFEXITED(data->exit_status))
+			data->exit_status = WEXITSTATUS(data->exit_status);
+	}
 	unlink(".msh_here");
 }

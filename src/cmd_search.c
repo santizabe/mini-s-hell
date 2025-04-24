@@ -6,7 +6,7 @@
 /*   By: szapata- <szapata-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 13:05:44 by szapata-          #+#    #+#             */
-/*   Updated: 2025/03/18 12:16:40 by szapata-         ###   ########.fr       */
+/*   Updated: 2025/04/23 20:29:47 by szapata-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ static char	*search_exec(char *word, char **env)
 	return (join_path(cwd, word, w_tmp));
 }
 
-char	*search_path(char *word, char **env)
+char	*search_path(char *word, t_data *data)
 {
 	char	*fd_slash;
 	char	*path;
@@ -85,7 +85,7 @@ char	*search_path(char *word, char **env)
 	if (ft_isbuiltin(word) || word[0] == '/')
 		return (ft_strdup(word));
 	if (!fd_slash)
-		return (get_path(word, env));
-	path = search_exec(word, env);
+		return (get_path(word, data));
+	path = search_exec(word, data->env);
 	return (path);
 }

@@ -6,13 +6,13 @@
 /*   By: szapata- <szapata-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 13:04:44 by szapata-          #+#    #+#             */
-/*   Updated: 2025/03/29 16:00:37 by szapata-         ###   ########.fr       */
+/*   Updated: 2025/04/23 19:50:43 by szapata-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-int	exit_status;
+int	g_exit_status;
 
 int	d_ptrlen(char **ptr)
 {
@@ -87,6 +87,7 @@ void	main_loop(t_data data, t_cmd *cmd_lst)
 {
 	while (1)
 	{
+		g_exit_status = 0;
 		if (init_data(&data, &cmd_lst) == -1)
 			break ;
 		data.prompt = readline("\033[38;5;208mMiniShell> \033[0m");
@@ -96,7 +97,7 @@ void	main_loop(t_data data, t_cmd *cmd_lst)
 			{
 				add_history(data.prompt);
 				if (!ft_parse(data, cmd_lst))
-					if (!ft_expand(cmd_lst, data.env)
+					if (!ft_expand(cmd_lst, &data)
 						&& !remove_quotes(cmd_lst))
 						ft_execute(cmd_lst, &data);
 			}
@@ -114,8 +115,11 @@ int	main(int argc, char **argv, char **env)
 	t_cmd	*cmd_lst;
 
 	cmd_lst = NULL;
+	ft_memset(&data, 0, sizeof(t_data));
 	signals();
-	if (argc++ && argv++ && copy_env(&(data.env), env) == -1)
+	(void)argc;
+	(void)argv;
+	if (copy_env(&(data.env), env) == -1)
 		return (-1);
 	init_msg();
 	main_loop(data, cmd_lst);

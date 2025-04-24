@@ -6,7 +6,7 @@
 /*   By: szapata- <szapata-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 19:57:33 by szapata-          #+#    #+#             */
-/*   Updated: 2025/03/17 18:54:02 by szapata-         ###   ########.fr       */
+/*   Updated: 2025/04/23 15:50:30 by szapata-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ char	**set_argv(t_list *args)
 	char	**tmp;
 
 	lstsize = ft_lstsize(args);
+	argv = NULL;
 	if (lstsize)
 		argv = (char **)malloc(sizeof(char *) * (lstsize + 1));
 	if (!argv)

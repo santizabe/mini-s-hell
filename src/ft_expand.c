@@ -6,7 +6,7 @@
 /*   By: szapata- <szapata-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 22:03:04 by szapata-          #+#    #+#             */
-/*   Updated: 2025/03/12 19:50:13 by szapata-         ###   ########.fr       */
+/*   Updated: 2025/04/23 18:57:46 by szapata-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,19 +52,33 @@ char	*ft_expand_var(char *s1, char *s2, char **env)
 	tmp = ft_strchr(s1, '$');
 	sum = tmp - s1 + var_len + ft_strlen(s2) + 1;
 	tmp = (char *)malloc(sizeof(char) + sum);
-	if (!tmp)
+	if (!tmp && my_free(s1))
 		return (NULL);
 	return (set_new_word(s1, tmp, s2, exp));
 }
 
-char	*ft_expand_word(char *str, char **env)
+char	*ft_expand_exit(char *s1, char *s2, t_data *data)
 {
+	char	*stat;
 	char	*tmp;
-	char	*tmp2;
+	int		sum;
+
+	stat = ft_itoa(data->exit_status);
+	if (!stat && my_free(s1))
+		return (NULL);
+	s2 += 2;
+	tmp = ft_strchr(s1, '$');
+	sum = tmp - s1 + ft_strlen(stat) + ft_strlen(s2) + 1;
+	tmp = (char *)malloc(sizeof(char) + sum);
+	if (!tmp && my_free(s1))
+		return (NULL);
+	return (set_new_word(s1, tmp, s2, stat));
+}
+
+char	*ft_expand_loop(char *str, char *tmp, t_data *data)
+{
 	char	q;
 
-	tmp = ft_strdup(str);
-	tmp2 = str;
 	q = 0;
 	while (tmp && str && *str)
 	{
@@ -75,12 +89,27 @@ char	*ft_expand_word(char *str, char **env)
 				str++;
 		if (*str == '$')
 		{
-			tmp = ft_expand_var(tmp, str, env);
+			if (*(str + 1) == '?')
+				tmp = ft_expand_exit(tmp, str, data);
+			else
+				tmp = ft_expand_var(tmp, str, data->env);
 			if (!tmp)
 				return (NULL);
 		}
 		str++;
 	}
-	free(tmp2);
 	return (tmp);
+}
+
+char	*ft_expand_word(char *str, t_data *data)
+{
+	char	*tmp;
+	char	*tmp2;
+	char	*res;
+
+	tmp = ft_strdup(str);
+	tmp2 = str;
+	res = ft_expand_loop(str, tmp, data);
+	free(tmp2);
+	return (res);
 }
