@@ -6,13 +6,11 @@
 /*   By: fernando <fernando@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 13:04:44 by szapata-          #+#    #+#             */
-/*   Updated: 2025/04/11 21:05:42 by fernando         ###   ########.fr       */
+/*   Updated: 2025/04/12 20:27:56 by fernando         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
-
-int	g_exit_status;
 
 int	d_ptrlen(char **ptr)
 {
@@ -24,6 +22,16 @@ int	d_ptrlen(char **ptr)
 	return (count);
 }
 
+/**
+ * @brief Creates a duplicate of the given environment array.
+ * 
+ * @param dst Pointer to the destination array where the copy will be stored.
+ * @param src Source environment array to copy (NULL-terminated strings).
+ * @return 0 on success, -1 on allocation failure.
+ * @note If src is empty or NULL, creates an empty environment array with 
+ * just a NULL terminator.
+ * @warning Caller is responsible for freeing the allocated memory.
+ */
 int	copy_env(char ***dst, char **src)
 {
 	int	env_len;

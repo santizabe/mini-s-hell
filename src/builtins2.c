@@ -6,7 +6,7 @@
 /*   By: fernando <fernando@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 18:34:54 by fosuna-g          #+#    #+#             */
-/*   Updated: 2025/04/11 20:51:44 by fernando         ###   ########.fr       */
+/*   Updated: 2025/04/24 15:36:57 by fernando         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,10 +69,7 @@ void	built_unset(t_cmd cmd_lst, char **env)
 void	built_export(t_cmd cmd_lst, t_data *data)
 {
 	if (!cmd_lst.w_lst->next)
-	{
-		ft_putstr_fd("Error: export: no arguments received\n", 2);
 		return ;
-	}
 	while (cmd_lst.w_lst->next)
 	{
 		built_export_aux(cmd_lst, data);

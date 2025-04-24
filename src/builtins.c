@@ -6,7 +6,7 @@
 /*   By: fernando <fernando@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/05 16:56:40 by fosuna-g          #+#    #+#             */
-/*   Updated: 2025/04/11 21:10:44 by fernando         ###   ########.fr       */
+/*   Updated: 2025/04/14 14:07:25 by fernando         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,7 +115,7 @@ void	main_builtin(t_cmd *cmd_lst, t_data *data)
 
 	if (cmd_lst->w_lst == NULL)
 	{
-		write(1, "La lista es nula\n", 17);
+		write(2, "Memory error\n", 13);
 		free_data(data, cmd_lst, 1);
 		exit(-1);
 	}
