@@ -6,7 +6,7 @@
 /*   By: szapata- <szapata-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 18:09:42 by szapata-          #+#    #+#             */
-/*   Updated: 2025/04/23 20:30:34 by szapata-         ###   ########.fr       */
+/*   Updated: 2025/04/24 19:51:58 by szapata-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,7 @@ void	handle_ctrl_c(int signal);
 int		init_data(t_data *data, t_cmd **cmd_lst);
 int		free_data(t_data *data, t_cmd *cmd_lst, char mode);
 int		double_free(char **ptr);
+int		d_ptrlen(char **ptr);
 
 // PARSING
 int		ft_parse(t_data data, t_cmd *cmd_lst);

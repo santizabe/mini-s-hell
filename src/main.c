@@ -6,7 +6,7 @@
 /*   By: szapata- <szapata-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 13:04:44 by szapata-          #+#    #+#             */
-/*   Updated: 2025/04/23 19:50:43 by szapata-         ###   ########.fr       */
+/*   Updated: 2025/04/24 18:16:19 by szapata-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,16 @@ int	d_ptrlen(char **ptr)
 	return (count);
 }
 
+/**
+ * @brief Creates a duplicate of the given environment array.
+ * 
+ * @param dst Pointer to the destination array where the copy will be stored.
+ * @param src Source environment array to copy (NULL-terminated strings).
+ * @return 0 on success, -1 on allocation failure.
+ * @note If src is empty or NULL, creates an empty environment array with 
+ * just a NULL terminator.
+ * @warning Caller is responsible for freeing the allocated memory.
+ */
 int	copy_env(char ***dst, char **src)
 {
 	int	env_len;

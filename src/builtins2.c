@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins2.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fernando <fernando@student.42.fr>          +#+  +:+       +#+        */
+/*   By: szapata- <szapata-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 18:34:54 by fosuna-g          #+#    #+#             */
-/*   Updated: 2025/04/11 20:51:44 by fernando         ###   ########.fr       */
+/*   Updated: 2025/04/24 20:09:46 by szapata-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,57 @@ void	built_unset(t_cmd cmd_lst, char **env)
 	}
 }
 
+void	copy_sorted(char **env, char **sort, int size)
+{
+	char	*tmp;
+	int		i;
+	int		j;
+
+	i = -1;
+	while (env[++i])
+		sort[i] = env[i];
+	j = 0;
+	while (j < size)
+	{
+		i = 0;
+		while (i < size - 1)
+		{
+			if (ft_strncmp(sort[i], sort[i + 1], ft_strlen(sort[i])) > 0)
+			{
+				tmp = sort[i];
+				sort[i] = sort[i + 1];
+				sort[i + 1] = tmp;
+			}
+			i++;
+		}
+		j++;
+	}
+}
+
+int	export_print(char **env)
+{
+	char	**sort;
+	char	**split;
+	int		len;
+
+	len = d_ptrlen(env);
+	sort = (char **)malloc(len * sizeof(char *));
+	if (!sort)
+		return (-1);
+	sort[len] = NULL;
+	copy_sorted(env, sort, len);
+	while (*sort)
+	{
+		split = ft_split(*sort, '=');
+		if (!split)
+			return (-1);
+		printf("declare -x %s=\"%s\"\n", split[0], split[1]);
+		free_array(split);
+		sort++;
+	}
+	return (0);
+}
+
 /**
  * @brief function that handle the execution of the export command
  *
@@ -70,7 +121,12 @@ void	built_export(t_cmd cmd_lst, t_data *data)
 {
 	if (!cmd_lst.w_lst->next)
 	{
-		ft_putstr_fd("Error: export: no arguments received\n", 2);
+		if (export_print(data->env)
+			&& write(2, "Error: malloc\n", 14))
+		{
+			free_data(data, &cmd_lst, 1);
+			exit(EXIT_FAILURE);
+		}
 		return ;
 	}
 	while (cmd_lst.w_lst->next)

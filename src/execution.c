@@ -6,7 +6,7 @@
 /*   By: szapata- <szapata-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/02 16:58:46 by szapata-          #+#    #+#             */
-/*   Updated: 2025/04/24 17:01:06 by szapata-         ###   ########.fr       */
+/*   Updated: 2025/04/24 18:13:33 by szapata-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,14 @@ int	exec_multiple(t_cmd *cmd_lst, t_data *data)
 	return (0);
 }
 
+/**
+ * @brief Executes either a single command or a pipeline from the command list.
+ * 
+ * @param cmd_lst Command list to execute (single command or pipeline).
+ * @param data Shell data containing environment and state.
+ * @note Automatically removes temporary here-doc file (.msh_here) after 
+ * execution.
+ */
 void	ft_execute(t_cmd *cmd_lst, t_data *data)
 {
 	int	ret;

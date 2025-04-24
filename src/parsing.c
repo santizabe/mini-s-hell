@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: szapata- <szapata-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fernando <fernando@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 13:26:19 by szapata-          #+#    #+#             */
-/*   Updated: 2025/03/18 12:23:13 by szapata-         ###   ########.fr       */
+/*   Updated: 2025/04/24 16:16:54 by fernando         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,19 @@ static int	ft_print_err(char *prompt)
 	return (1);
 }
 
+/**
+ * @brief Parses shell input into a command list structure.
+ * 
+ * @param data Container holding the input prompt to parse.
+ * @param cmd_lst Pointer to the command list where parsed elements will 
+ * be stored.
+ * @return 0 on success, -1 on memory allocation failure or parsing error.
+ * @note Handles spaces, meta-characters, pipes, and builds a linked list 
+ * of commands.
+ * @warning The command list must be properly initialized before calling 
+ * this function.
+ *          Caller is responsible for freeing the allocated command list memory.
+ */
 int	ft_parse(t_data data, t_cmd *cmd_lst)
 {
 	char	*prompt;
