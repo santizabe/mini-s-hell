@@ -6,7 +6,7 @@
 /*   By: szapata- <szapata-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/02 16:58:46 by szapata-          #+#    #+#             */
-/*   Updated: 2025/04/24 16:03:00 by szapata-         ###   ########.fr       */
+/*   Updated: 2025/04/24 17:01:06 by szapata-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,5 +107,4 @@ void	ft_execute(t_cmd *cmd_lst, t_data *data)
 		else if (WIFEXITED(data->exit_status))
 			data->exit_status = WEXITSTATUS(data->exit_status);
 	}
-	unlink(".msh_here");
 }
