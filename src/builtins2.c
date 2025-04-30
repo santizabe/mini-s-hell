@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins2.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: szapata- <szapata-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fernando <fernando@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 18:34:54 by fosuna-g          #+#    #+#             */
-/*   Updated: 2025/04/24 20:09:46 by szapata-         ###   ########.fr       */
+/*   Updated: 2025/04/30 12:08:43 by fernando         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ void	built_unset_aux(char *variable, char **env)
  * @param cmd_lst Command structure containing variables to unset.
  * @param env Environment variables array (modified in place).
  */
-void	built_unset(t_cmd cmd_lst, char **env)
+void	built_unset(t_cmd cmd_lst, t_data *data)
 {
 	char	*variable;
 
@@ -55,9 +55,10 @@ void	built_unset(t_cmd cmd_lst, char **env)
 	{
 		cmd_lst.w_lst = cmd_lst.w_lst->next;
 		variable = cmd_lst.w_lst->content;
-		if (my_getenv(variable, env))
-			built_unset_aux(variable, env);
+		if (my_getenv(variable, data->env))
+			built_unset_aux(variable, data->env);
 	}
+	data->exit_status = 0;
 }
 
 void	copy_sorted(char **env, char **sort, int size)

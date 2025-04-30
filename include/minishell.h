@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: szapata- <szapata-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fernando <fernando@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 18:09:42 by szapata-          #+#    #+#             */
-/*   Updated: 2025/04/24 19:51:58 by szapata-         ###   ########.fr       */
+/*   Updated: 2025/04/30 16:58:56 by fernando         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,7 +128,7 @@ int		built_cd_home(char **env);
 void	built_cd(t_cmd *cmd_lst, t_data *data);
 int		change_values_env(char *name, char *str, char **env);
 void	built_export(t_cmd cmd_lst, t_data *data);
-void	built_unset(t_cmd cmd_lst, char **env);
+void	built_unset(t_cmd cmd_lst, t_data *data);
 
 // BUILTINS UTILS
 char	*ft_strjoin3(char *s1, char *s2, int b1, int b2);

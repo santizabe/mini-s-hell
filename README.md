@@ -2,7 +2,7 @@
 
 A minimalist UNIX shell inspired by bash, developed as part of [42 School](https://www.42.fr/) curriculum. Implements core shell functionalities including command execution, pipes, redirections, and environment variables.
 
-![Demo GIF]()
+![Demo GIF](Demo.gif)
 
 ---
 
@@ -78,7 +78,7 @@ minishell> exit  # Quit shell
 | Command                  | Description                     |
 |--------------------------|---------------------------------|
 | `cd [dir]`, `cd`, `cd -` | Change directory                |
-| `export VAY=value`       | Set environment variable        |
+| `export VAR=value`       | Set environment variable        |
 | `unset VAR`              | Remove environment variable     |
 | `echo [args]`            | Print text (suport `-n` flag)   |
 | `pwd`                    | Print working directory         |

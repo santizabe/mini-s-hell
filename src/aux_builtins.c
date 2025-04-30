@@ -6,7 +6,7 @@
 /*   By: fernando <fernando@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 18:19:29 by fosuna-g          #+#    #+#             */
-/*   Updated: 2025/04/11 21:12:11 by fernando         ###   ########.fr       */
+/*   Updated: 2025/04/30 12:14:43 by fernando         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,6 +92,7 @@ void	built_export_aux(t_cmd cmd_lst, t_data *data)
 		ft_putstr_fd(str, 2);
 		ft_putstr_fd("': not a valid identifier\n", 2);
 		free(value);
+		data->exit_status = 1;
 		return ;
 	}
 	variable = ft_strchr(str, '=');
@@ -100,6 +101,7 @@ void	built_export_aux(t_cmd cmd_lst, t_data *data)
 	else if (variable != NULL)
 		data->env = ft_export(value, variable + 1, data->env);
 	free(value);
+	data->exit_status = 0;
 }
 
 /**
