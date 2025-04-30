@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fernando <fernando@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fosuna-g <fosuna-g@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/05 16:56:40 by fosuna-g          #+#    #+#             */
-/*   Updated: 2025/04/30 12:13:53 by fernando         ###   ########.fr       */
+/*   Updated: 2025/04/30 18:42:14 by fosuna-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,18 +66,22 @@ void	built_echo(t_cmd cmd_lst, t_data *data)
  */
 void	built_env(t_cmd *cmd_lst, t_data *data)
 {
+	int	i;
+
+	i = 0;
 	if (cmd_lst->w_lst->next != NULL)
 	{
 		ft_putstr_fd("env: too much parameters\n", 2);
 		data->exit_status = 127;
 		return ;
 	}
-	while (*(data->env))
+	while ((data->env)[i] != NULL)
 	{
-		ft_putstr_fd(*(data->env), 1);
+		ft_putstr_fd((data->env)[i], 1);
 		write(1, "\n", 1);
-		(data->env)++;
+		i++;
 	}
+	data->exit_status = 0;
 }
 
 /**

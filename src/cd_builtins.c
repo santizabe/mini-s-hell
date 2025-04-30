@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd_builtins.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fernando <fernando@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fosuna-g <fosuna-g@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 18:29:26 by fosuna-g          #+#    #+#             */
-/*   Updated: 2025/04/30 17:11:33 by fernando         ###   ########.fr       */
+/*   Updated: 2025/04/30 18:26:46 by fosuna-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int	built_cd_path(char *path, char **env)
 	{
 		ft_putstr_fd("cd: '", 2);
 		ft_putstr_fd(path, 2);
-		ft_putstr_fd("': PWD not set", 2);
+		ft_putstr_fd("': PWD not set\n", 2);
 		return (1);
 	}
 	new_path = rebuild_path(path, ft_strdup(pwd));
@@ -47,13 +47,13 @@ int	built_cd_old(char **env)
 	pwd = ft_strdup(my_getenv("PWD", env));
 	if (!pwd)
 	{
-		ft_putstr_fd("cd: '-': PWD not set", 2);
+		ft_putstr_fd("cd: '-': PWD not set\n", 2);
 		return (1);
 	}
 	old = my_getenv("OLDPWD", env);
 	if (!old)
 	{
-		ft_putstr_fd("cd: '-': OLDPWD not set", 2);
+		ft_putstr_fd("cd: '-': OLDPWD not set\n", 2);
 		return (1);
 	}
 	err = chdir(old);
@@ -74,14 +74,13 @@ int	built_cd_home(char **env)
 	pwd = my_getenv("PWD", env);
 	if (!pwd)
 	{
-		ft_putstr_fd("cd: PWD not set", 2);
+		ft_putstr_fd("cd: PWD not set\n", 2);
 		return (1);
 	}
 	next = my_getenv("HOME", env);
 	if (!next)
 	{
 		ft_putstr_fd("cd: HOME not set\n", 2);
-		free(pwd);
 		return (1);
 	}
 	err = chdir(next);
@@ -102,7 +101,7 @@ int	built_cd_root(char *path, char **env)
 	{
 		ft_putstr_fd("cd: '", 2);
 		ft_putstr_fd(path, 2);
-		ft_putstr_fd("': PWD not set", 2);
+		ft_putstr_fd("': PWD not set\n", 2);
 		return (1);
 	}
 	if (!path)
@@ -147,7 +146,7 @@ void	built_cd(t_cmd *cmd_lst, t_data *data)
 	else
 		err = built_cd_path(cmd_lst->w_lst->next->content, data->env);
 	data->exit_status = err;
-	if (err)
+	if (err < 0)
 	{
 		ft_putstr_fd("Error path '", 2);
 		ft_putstr_fd(cmd_lst->w_lst->next->content, 2);

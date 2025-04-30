@@ -2,7 +2,7 @@
 
 A minimalist UNIX shell inspired by bash, developed as part of [42 School](https://www.42.fr/) curriculum. Implements core shell functionalities including command execution, pipes, redirections, and environment variables.
 
-![Demo GIF](Demo.gif)
+![Demo GIF](Demo2.gif)
 
 ---
 

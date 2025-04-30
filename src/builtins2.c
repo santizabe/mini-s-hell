@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins2.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fernando <fernando@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fosuna-g <fosuna-g@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 18:34:54 by fosuna-g          #+#    #+#             */
-/*   Updated: 2025/04/30 12:08:43 by fernando         ###   ########.fr       */
+/*   Updated: 2025/04/30 19:02:05 by fosuna-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,7 @@ int	export_print(char **env)
 	int		len;
 
 	len = d_ptrlen(env);
-	sort = (char **)malloc(len * sizeof(char *));
+	sort = (char **)malloc((len + 1) * sizeof(char *));
 	if (!sort)
 		return (-1);
 	sort[len] = NULL;
@@ -105,7 +105,10 @@ int	export_print(char **env)
 		split = ft_split(*sort, '=');
 		if (!split)
 			return (-1);
-		printf("declare -x %s=\"%s\"\n", split[0], split[1]);
+		if (split[1] == NULL)
+			printf("declare -x %s=\"\"\n", split[0]);
+		else
+			printf("declare -x %s=\"%s\"\n", split[0], split[1]);
 		free_array(split);
 		sort++;
 	}
