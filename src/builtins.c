@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fosuna-g <fosuna-g@student.42.fr>          +#+  +:+       +#+        */
+/*   By: szapata- <szapata-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/05 16:56:40 by fosuna-g          #+#    #+#             */
-/*   Updated: 2025/04/30 18:42:14 by fosuna-g         ###   ########.fr       */
+/*   Updated: 2025/05/06 19:35:52 by szapata-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,13 +124,9 @@ void	built_exit(t_cmd *cmd_lst, t_data *data)
 void	main_builtin(t_cmd *cmd_lst, t_data *data)
 {
 	char	*cmd;
+	int		fd_tmp[2];
 
-	if (cmd_lst->w_lst == NULL)
-	{
-		write(2, "Memory error\n", 13);
-		free_data(data, cmd_lst, 1);
-		exit(-1);
-	}
+	set_redirs_builtin(cmd_lst, fd_tmp, 1);
 	cmd = cmd_lst->w_lst->content;
 	if (!ft_strncmp(cmd, "cd", ft_strlen("cd")))
 		built_cd(cmd_lst, data);
@@ -146,4 +142,5 @@ void	main_builtin(t_cmd *cmd_lst, t_data *data)
 		built_export(*cmd_lst, data);
 	else if (!ft_strncmp(cmd, "unset", ft_strlen("unset")))
 		built_unset(*cmd_lst, data);
+	set_redirs_builtin(cmd_lst, fd_tmp, 2);
 }

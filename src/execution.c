@@ -6,7 +6,7 @@
 /*   By: szapata- <szapata-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/02 16:58:46 by szapata-          #+#    #+#             */
-/*   Updated: 2025/04/24 18:13:33 by szapata-         ###   ########.fr       */
+/*   Updated: 2025/05/06 19:01:32 by szapata-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,7 +107,7 @@ void	ft_execute(t_cmd *cmd_lst, t_data *data)
 	if (!(cmd_lst->next))
 		ret = execute_cmd(cmd_lst, data);
 	else
-		exec_multiple(cmd_lst, data);
+		ret = exec_multiple(cmd_lst, data);
 	if (ret == 0)
 	{
 		if (WIFSIGNALED(data->exit_status))

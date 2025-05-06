@@ -6,13 +6,13 @@
 /*   By: szapata- <szapata-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 19:59:33 by szapata-          #+#    #+#             */
-/*   Updated: 2025/04/24 13:27:17 by szapata-         ###   ########.fr       */
+/*   Updated: 2025/05/06 19:18:10 by szapata-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-static	void	set_redirs(t_cmd *cmds)
+void	set_redirs_simple(t_cmd *cmds)
 {
 	int	in_fd;
 	int	out_fd;
@@ -44,9 +44,14 @@ int	exec_child(char *path, char **argv, t_cmd *cmds, t_data *data)
 	else if (!pid)
 	{
 		signal(SIGINT, SIG_DFL);
-		set_redirs(cmds);
-		execve(path, argv, data->env);
-		perror("execve");
+		set_redirs_simple(cmds);
+		if (cmds->w_lst)
+		{
+			execve(path, argv, data->env);
+			perror("execve");
+			exit(EXIT_FAILURE);
+		}
+		exit(EXIT_SUCCESS);
 	}
 	else
 		waitpid(pid, &data->exit_status, 0);
@@ -57,12 +62,18 @@ int	execute_cmd(t_cmd *cmds, t_data *data)
 {
 	char	**argv;
 	char	*path;
+	char	*aux;
 
-	path = search_path(cmds->w_lst->content, data);
-	if (!path)
+	path = NULL;
+	if (cmds->w_lst)
+		path = search_path(cmds->w_lst->content, data);
+	if (!path && cmds->w_lst)
 		return (-1);
 	argv = set_argv(cmds->w_lst);
-	if (!ft_isbuiltin(argv[0]))
+	aux = NULL;
+	if (argv)
+		aux = *argv;
+	if (!ft_isbuiltin(aux))
 		exec_child(path, argv, cmds, data);
 	else
 		main_builtin(cmds, data);

@@ -6,7 +6,7 @@
 /*   By: szapata- <szapata-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 13:04:44 by szapata-          #+#    #+#             */
-/*   Updated: 2025/04/24 18:16:19 by szapata-         ###   ########.fr       */
+/*   Updated: 2025/05/06 19:38:15 by szapata-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,42 +56,17 @@ int	copy_env(char ***dst, char **src)
 	}
 	return (0);
 }
-/*
-int	print_data(t_cmd *cmd_lst)
-{
-	t_redir	*redir;
-	t_list	*tmp;
 
-	while (cmd_lst)
+int	check_spaces(char *s)
+{
+	while (s && *s)
 	{
-		tmp = cmd_lst->w_lst;
-		while (tmp)
-		{
-			printf("%s, ", (char *)tmp->content);
-			tmp = tmp->next;
-		}
-		printf("\n");
-		tmp = cmd_lst->in_redir;
-		while (tmp)
-		{
-			redir = (t_redir *)tmp->content;
-			printf("%s, ", redir->file);
-			tmp = tmp->next;
-		}
-		printf("\n");
-		tmp = cmd_lst->out_redir;
-		while (tmp)
-		{
-			redir = (t_redir *)tmp->content;
-			printf("%s, ", redir->file);
-			tmp = tmp->next;
-		}
-		printf("\n ----------------------\n");
-		cmd_lst = cmd_lst->next;
+		if (*s != ' ' && *s != '\t')
+			return (1);
+		s++;
 	}
-	return (1);
+	return (0);
 }
-*/
 
 void	main_loop(t_data data, t_cmd *cmd_lst)
 {
@@ -103,7 +78,7 @@ void	main_loop(t_data data, t_cmd *cmd_lst)
 		data.prompt = readline("\033[38;5;208mMiniShell> \033[0m");
 		if (data.prompt)
 		{
-			if (*(data.prompt))
+			if (*(data.prompt) && check_spaces(data.prompt))
 			{
 				add_history(data.prompt);
 				if (!ft_parse(data, cmd_lst))

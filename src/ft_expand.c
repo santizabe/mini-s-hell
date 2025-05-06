@@ -6,7 +6,7 @@
 /*   By: szapata- <szapata-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 22:03:04 by szapata-          #+#    #+#             */
-/*   Updated: 2025/04/23 18:57:46 by szapata-         ###   ########.fr       */
+/*   Updated: 2025/05/06 17:55:40 by szapata-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ char	*ft_expand_loop(char *str, char *tmp, t_data *data)
 		if (*str == '\'' && !(q % 2) && str++)
 			while (*str && *str != '\'')
 				str++;
-		if (*str == '$')
+		if (*str == '$' && *(str + 1))
 		{
 			if (*(str + 1) == '?')
 				tmp = ft_expand_exit(tmp, str, data);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fernando <fernando@student.42.fr>          +#+  +:+       +#+        */
+/*   By: szapata- <szapata-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 18:10:12 by fosuna-g          #+#    #+#             */
-/*   Updated: 2025/04/11 20:58:25 by fernando         ###   ########.fr       */
+/*   Updated: 2025/05/06 19:36:31 by szapata-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,4 +121,21 @@ char	*ft_strjoin3(char *s1, char *s2, int b1, int b2)
 	if (b2)
 		free(s2);
 	return (res);
+}
+
+void	set_redirs_builtin(t_cmd *cmd_lst, int fd[2], int mode)
+{
+	if (mode == 1)
+	{
+		fd[0] = dup(STDIN_FILENO);
+		fd[1] = dup(STDOUT_FILENO);
+		set_redirs_simple(cmd_lst);
+	}
+	else if (mode == 2)
+	{
+		dup2(fd[0], STDIN_FILENO);
+		dup2(fd[1], STDOUT_FILENO);
+		close(fd[0]);
+		close(fd[1]);
+	}
 }

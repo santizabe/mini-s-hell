@@ -6,7 +6,7 @@
 /*   By: szapata- <szapata-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 13:05:44 by szapata-          #+#    #+#             */
-/*   Updated: 2025/04/23 20:29:47 by szapata-         ###   ########.fr       */
+/*   Updated: 2025/05/06 18:13:26 by szapata-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,11 @@ int	ft_isbuiltin(char *cmd)
 {
 	int	cmd_len;
 
+	if (!cmd)
+		return (0);
 	cmd_len = ft_strlen(cmd);
+	if (cmd_len < 2)
+		cmd_len++;
 	if (cmd_len && (!ft_strncmp(cmd, "cd", cmd_len)
 			|| !ft_strncmp(cmd, "pwd", cmd_len)
 			|| !ft_strncmp(cmd, "env", cmd_len)

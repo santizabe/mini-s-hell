@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd_builtins.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fosuna-g <fosuna-g@student.42.fr>          +#+  +:+       +#+        */
+/*   By: szapata- <szapata-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 18:29:26 by fosuna-g          #+#    #+#             */
-/*   Updated: 2025/04/30 18:26:46 by fosuna-g         ###   ########.fr       */
+/*   Updated: 2025/05/06 19:46:32 by szapata-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,8 +143,10 @@ void	built_cd(t_cmd *cmd_lst, t_data *data)
 		err = built_cd_old(data->env);
 	else if (((char *)cmd_lst->w_lst->next->content)[0] == '/')
 		err = built_cd_root(cmd_lst->w_lst->next->content, data->env);
-	else
+	else if (!cmd_lst->w_lst->next->next)
 		err = built_cd_path(cmd_lst->w_lst->next->content, data->env);
+	else
+		err = write(2, "cd: too many arguments\n", 23);
 	data->exit_status = err;
 	if (err < 0)
 	{

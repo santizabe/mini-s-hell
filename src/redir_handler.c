@@ -6,7 +6,7 @@
 /*   By: szapata- <szapata-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/06 11:05:41 by szapata-          #+#    #+#             */
-/*   Updated: 2025/04/24 13:17:50 by szapata-         ###   ########.fr       */
+/*   Updated: 2025/05/06 19:20:55 by szapata-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@ int	open_outfiles(t_list *f_lst)
 		if (!(f_lst->next))
 			break ;
 		close(fd);
+		f_lst = f_lst->next;
 	}
 	return (fd);
 }

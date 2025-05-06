@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fernando <fernando@student.42.fr>          +#+  +:+       +#+        */
+/*   By: szapata- <szapata-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 13:26:19 by szapata-          #+#    #+#             */
-/*   Updated: 2025/04/24 16:16:54 by fernando         ###   ########.fr       */
+/*   Updated: 2025/05/06 18:25:22 by szapata-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ int	add_word(char **prompt, int flags, t_cmd *cmd_lst)
 	return (0);
 }
 
-static int	ft_print_err(char *prompt)
+static int	ft_print_err(char *prompt, t_data *data)
 {
 	char	*err_msg;
 
@@ -85,6 +85,7 @@ static int	ft_print_err(char *prompt)
 		write(2, "'", 1);
 	}
 	ft_putstr_fd("\n", 2);
+	data->exit_status = 2;
 	return (1);
 }
 
@@ -115,7 +116,7 @@ int	ft_parse(t_data data, t_cmd *cmd_lst)
 		if (ft_ismeta(*prompt))
 			flags = set_flags(&prompt);
 		if (add_word(&prompt, flags, cmd_lst) == -1
-			&& ft_print_err(prompt))
+			&& ft_print_err(prompt, &data))
 			return (-1);
 		if (*prompt == '|' && *(prompt + 1) && prompt++)
 		{

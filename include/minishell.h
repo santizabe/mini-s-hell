@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fernando <fernando@student.42.fr>          +#+  +:+       +#+        */
+/*   By: szapata- <szapata-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 18:09:42 by szapata-          #+#    #+#             */
-/*   Updated: 2025/04/30 16:58:56 by fernando         ###   ########.fr       */
+/*   Updated: 2025/05/06 19:35:58 by szapata-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,6 +102,7 @@ char	**set_argv(t_list *args);
 int		close_multiple(int pipefd[2], int std_tmp[2]);
 int		clo_exec(int pipefd[2], char **argv, char *path, int pid);
 int		print_err(char *str);
+void	set_redirs_simple(t_cmd *cmds);
 
 // REDIRECTION
 int		open_infile(t_list *f_lst);
@@ -135,5 +136,6 @@ char	*ft_strjoin3(char *s1, char *s2, int b1, int b2);
 int		manage_pp(char *path, char *pwd, int i);
 void	built_export_aux(t_cmd cmd_lst, t_data *data);
 char	*rebuild_path(char *path, char *pwd);
+void	set_redirs_builtin(t_cmd *cmd_lst, int fd[2], int mode);
 
 #endif
