@@ -69,7 +69,8 @@ make
 $ ./minishell  
 minishell> ls -la | grep "README"  # Pipes work  
 minishell> echo "Hello $USER"      # Env var expansion  
-minishell> cat < input.txt > output.txt  # Redirections  
+minishell> cat < input.txt > output.txt  # Redirections
+minishell> echo $?  # Error code
 minishell> exit  # Quit shell  
 ```
 
