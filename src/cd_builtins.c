@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd_builtins.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: szapata- <szapata-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fernando <fernando@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 18:29:26 by fosuna-g          #+#    #+#             */
-/*   Updated: 2025/05/06 19:46:32 by szapata-         ###   ########.fr       */
+/*   Updated: 2025/05/07 09:35:03 by fernando         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,14 +26,14 @@ int	built_cd_path(char *path, char **env)
 		ft_putstr_fd("': PWD not set\n", 2);
 		return (1);
 	}
-	new_path = rebuild_path(path, ft_strdup(pwd));
-	if (!new_path)
-		return (-1);
-	err = chdir(new_path);
-	if (!err && !change_values_env("OLDPWD", pwd, env))
-		ft_export("OLDPWD", pwd, env);
+	err = chdir(path);
 	if (!err)
+	{
+		new_path = getcwd(NULL, 0);
+		if (!err && !change_values_env("OLDPWD", pwd, env))
+			ft_export("OLDPWD", pwd, env);
 		change_values_env("PWD", new_path, env);
+	}
 	free(new_path);
 	return (err);
 }
@@ -91,29 +91,6 @@ int	built_cd_home(char **env)
 	return (err);
 }
 
-int	built_cd_root(char *path, char **env)
-{
-	int		err;
-	char	*pwd;
-
-	pwd = my_getenv("PWD", env);
-	if (!pwd)
-	{
-		ft_putstr_fd("cd: '", 2);
-		ft_putstr_fd(path, 2);
-		ft_putstr_fd("': PWD not set\n", 2);
-		return (1);
-	}
-	if (!path)
-		return (-1);
-	err = chdir(path);
-	if (!err && !change_values_env("OLDPWD", pwd, env))
-		ft_export("OLDPWD", pwd, env);
-	if (!err)
-		change_values_env("PWD", path, env);
-	return (err);
-}
-
 /**
  * @brief Handles the 'cd' shell builtin command (change directory).  
  *  
@@ -141,8 +118,6 @@ void	built_cd(t_cmd *cmd_lst, t_data *data)
 		err = built_cd_home(data->env);
 	else if (!ft_strncmp(cmd_lst->w_lst->next->content, "-", 1))
 		err = built_cd_old(data->env);
-	else if (((char *)cmd_lst->w_lst->next->content)[0] == '/')
-		err = built_cd_root(cmd_lst->w_lst->next->content, data->env);
 	else if (!cmd_lst->w_lst->next->next)
 		err = built_cd_path(cmd_lst->w_lst->next->content, data->env);
 	else

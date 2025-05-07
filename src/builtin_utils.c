@@ -3,50 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: szapata- <szapata-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fernando <fernando@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 18:10:12 by fosuna-g          #+#    #+#             */
-/*   Updated: 2025/05/06 19:36:31 by szapata-         ###   ########.fr       */
+/*   Updated: 2025/05/07 09:34:03 by fernando         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
-
-/**
- * @brief Processes ".." in a path and adjusts the pwd accordingly.  
- *  
- * @param path Path to process.  
- * @param pwd Current working directory (modified in place).  
- * @param i Starting index in path.  
- * @return New index after processing, or -1 if path escapes root.  
- */
-int	manage_pp(char *path, char *pwd, int i)
-{
-	int	cntp;
-	int	len;
-
-	cntp = 0;
-	len = ft_strlen(pwd) - 1;
-	while (path[i] && path[i + 1] && !ft_strncmp(&path[i], "..", 2))
-	{
-		cntp++;
-		i += 2;
-		if (path[i] == '/')
-			i++;
-	}
-	while (pwd[len] && cntp > 0)
-	{
-		if (pwd[len] == '/' && pwd[len + 1] != '\0')
-		{
-			pwd[len] = '\0';
-			cntp--;
-		}
-		len--;
-	}
-	if (pwd[len] == '\0' && cntp > 0)
-		return (-1);
-	return (i);
-}
 
 /**
  * @brief Checks if a string represents a valid integer number.

@@ -6,45 +6,11 @@
 /*   By: fernando <fernando@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 18:19:29 by fosuna-g          #+#    #+#             */
-/*   Updated: 2025/04/30 12:14:43 by fernando         ###   ########.fr       */
+/*   Updated: 2025/05/07 09:32:09 by fernando         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
-
-/**
- * @brief Reconstructs an absolute path from relative components.  
- *  
- * @param path Relative path to process.  
- * @param pwd Current working directory (modified/freed if needed).  
- * @return Newly allocated absolute path, or NULL if invalid.
- */
-char	*rebuild_path(char *path, char *pwd)
-{
-	int		i;
-	char	*res;
-
-	i = 0;
-	while (!ft_strncmp(&path[i], "./", 2))
-		i += 2;
-	if (i > 0)
-	{
-		path = &path[i];
-		i = 0;
-	}
-	i = manage_pp(path, pwd, i);
-	if (i < 0)
-	{
-		free(pwd);
-		return (NULL);
-	}
-	res = pwd;
-	if (pwd[ft_strlen(pwd) - 1] != '/' && path[i] != '/')
-		res = ft_strjoin3(res, "/", 1, 0);
-	if (path[i])
-		res = ft_strjoin3(res, ft_strdup(path + i), 1, 1);
-	return (res);
-}
 
 /**
  * @brief copies all the string `str` until the int `c` match with 
