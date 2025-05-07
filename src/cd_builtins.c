@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd_builtins.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fernando <fernando@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fosuna-g <fosuna-g@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 18:29:26 by fosuna-g          #+#    #+#             */
-/*   Updated: 2025/05/07 09:35:03 by fernando         ###   ########.fr       */
+/*   Updated: 2025/05/07 18:59:18 by fosuna-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,8 @@ int	built_cd_path(char *path, char **env)
 		if (!err && !change_values_env("OLDPWD", pwd, env))
 			ft_export("OLDPWD", pwd, env);
 		change_values_env("PWD", new_path, env);
+		free(new_path);
 	}
-	free(new_path);
 	return (err);
 }
 
