@@ -6,7 +6,7 @@
 /*   By: fernando <fernando@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 18:09:42 by szapata-          #+#    #+#             */
-/*   Updated: 2025/05/07 09:33:43 by fernando         ###   ########.fr       */
+/*   Updated: 2025/05/08 13:02:51 by fernando         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,9 +123,9 @@ char	*get_path(char *command, t_data *data);
 // BUILTINS
 void	main_builtin(t_cmd *cmd_lst, t_data *data);
 char	**ft_export(char *var, char *value, char **env);
-int		built_cd_old(char **env);
-int		built_cd_path(char *path, char **env);
-int		built_cd_home(char **env);
+char	**built_cd_old(char **env, int *err);
+char	**built_cd_path(char *path, char **env, int *err);
+char	**built_cd_home(char **env, int *err);
 void	built_cd(t_cmd *cmd_lst, t_data *data);
 int		change_values_env(char *name, char *str, char **env);
 void	built_export(t_cmd cmd_lst, t_data *data);

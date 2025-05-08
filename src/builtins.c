@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: szapata- <szapata-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fernando <fernando@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/05 16:56:40 by fosuna-g          #+#    #+#             */
-/*   Updated: 2025/05/06 19:35:52 by szapata-         ###   ########.fr       */
+/*   Updated: 2025/05/08 13:06:27 by fernando         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,8 +90,6 @@ void	built_env(t_cmd *cmd_lst, t_data *data)
  */
 void	built_exit(t_cmd *cmd_lst, t_data *data)
 {
-	int	num;
-
 	ft_putstr_fd("exit\n", 2);
 	if (cmd_lst->w_lst->next == NULL)
 	{
@@ -108,9 +106,14 @@ void	built_exit(t_cmd *cmd_lst, t_data *data)
 			free_data(data, cmd_lst, 1);
 			exit(2);
 		}
-		num = ft_atoi(cmd_lst->w_lst->next->content);
+		if (cmd_lst->w_lst->next->next)
+		{
+			ft_putstr_fd("exit: too much argument\n", 2);
+			data->exit_status = 1;
+			return ;
+		}
 		free_data(data, cmd_lst, 1);
-		exit(num);
+		exit(ft_atoi(cmd_lst->w_lst->next->content));
 	}
 }
 
@@ -129,16 +132,16 @@ void	main_builtin(t_cmd *cmd_lst, t_data *data)
 	set_redirs_builtin(cmd_lst, fd_tmp, 1);
 	cmd = cmd_lst->w_lst->content;
 	if (!ft_strncmp(cmd, "cd", ft_strlen("cd")))
-		built_cd(cmd_lst, data);
+	built_cd(cmd_lst, data);
 	else if (!ft_strncmp(cmd, "exit", ft_strlen("exit")))
-		built_exit(cmd_lst, data);
+	built_exit(cmd_lst, data);
 	else if (!ft_strncmp(cmd, "echo", ft_strlen("echo")))
 		built_echo(*cmd_lst, data);
-	else if (!ft_strncmp(cmd, "pwd", ft_strlen("pwd")))
+		else if (!ft_strncmp(cmd, "pwd", ft_strlen("pwd")))
 		built_pwd(data);
-	else if (!ft_strncmp(cmd, "env", ft_strlen("env")))
+		else if (!ft_strncmp(cmd, "env", ft_strlen("env")))
 		built_env(cmd_lst, data);
-	else if (!ft_strncmp(cmd, "export", ft_strlen("export")))
+		else if (!ft_strncmp(cmd, "export", ft_strlen("export")))
 		built_export(*cmd_lst, data);
 	else if (!ft_strncmp(cmd, "unset", ft_strlen("unset")))
 		built_unset(*cmd_lst, data);

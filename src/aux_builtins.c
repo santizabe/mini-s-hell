@@ -6,7 +6,7 @@
 /*   By: fernando <fernando@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 18:19:29 by fosuna-g          #+#    #+#             */
-/*   Updated: 2025/05/07 09:32:09 by fernando         ###   ########.fr       */
+/*   Updated: 2025/05/08 12:05:56 by fernando         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,10 +136,10 @@ char	**ft_export(char *var, char *value, char **env)
 	if (!new_env)
 	{
 		free(env_var);
-		write(2, "Error allocating memory", 23);
 		return (NULL);
 	}
 	free(env);
 	free(env_var);
+	env = new_env;
 	return (new_env);
 }
