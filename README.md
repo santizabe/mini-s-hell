@@ -26,7 +26,7 @@ A minimalist UNIX shell inspired by bash, developed as part of [42 School](https
 | **Environment variables** (`$HOME`) | ✅ | Expansion and inheritance |
 | **Signals** (`Ctrl-C`, `Ctrl-D`, `Ctrl-\`) | ✅ | Graceful process interruption |
 | **Built-ins** (`cd`, `export`, etc.) | ✅ | See [built-ins](#-built-ins) |
-|**Exit status** (`$?`) | ✅ | Exit status of the most recentlly executed foreground pipeline. |
+|**Exit status** (`$?`) | ✅ | Exit status of the most recently executed foreground pipeline. |
 | **Command history** (with ↑/↓ arrows) | ✅ | Persists across sessions |
 
 ---
